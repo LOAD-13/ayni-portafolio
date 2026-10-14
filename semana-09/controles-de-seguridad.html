@@ -1,0 +1,455 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Controles de Seguridad · Ayni Bank</title><style>
+:root{--az:#064475;--az6:#0A5A96;--az05:#F2F7FB;--az1:#E3EEF7;--g3:#D3D8DE;--g7:#4A5560;
+ --g9:#1F2933;--oro:#C59E41;--rojo:#B3261E;--verde:#0F7A52;--lila:#6B4FA8;
+ --bg:#FFFFFF;--pan:#FFFFFF;--som:rgba(0,0,0,.12);--cod:#F4F6F8}
+body[data-t="oscuro"]{--az:#8FC1EA;--az6:#5A9BD4;--az05:#161D26;--az1:#1E2C3A;--g3:#2C3744;
+ --g7:#8B98A6;--g9:#E3E8ED;--oro:#E0B55C;--rojo:#FF6B5E;--verde:#4FBF8B;--lila:#A08BD4;
+ --bg:#0F141A;--pan:#1B2430;--som:rgba(0,0,0,.6);--cod:#131A22}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI",Calibri,sans-serif;color:var(--g9);background:var(--bg);
+ display:flex;flex-direction:column;min-height:100vh;transition:background .25s,color .25s}
+code{font-family:Consolas,"Courier New",monospace;background:var(--cod);padding:1px 5px;
+ border-radius:3px;font-size:.92em}
+b{color:inherit}
+header.top{position:sticky;top:0;z-index:60;background:var(--pan);
+ border-bottom:1px solid var(--g3);padding:12px 26px 0}
+.tit{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font-size:19px;color:var(--az)}
+.tit .s{font-size:11.5px;color:var(--g7)}
+.tit .acc{margin-left:auto;display:flex;gap:8px;align-items:center}
+.bt{font:inherit;font-size:11px;padding:4px 13px;border:1.5px solid var(--g3);
+ background:var(--pan);border-radius:15px;color:var(--g7);cursor:pointer}
+.bt:hover{border-color:var(--az6);color:var(--az)}
+.bt.on{background:var(--az);border-color:var(--az);color:#fff;font-weight:600}
+nav.tabs{display:flex;gap:3px;margin-top:11px;overflow-x:auto}
+.tab{font:inherit;font-size:12.5px;padding:8px 17px;border:1px solid var(--g3);border-bottom:none;
+ background:transparent;color:var(--g7);border-radius:7px 7px 0 0;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--az);border-color:var(--az);color:#fff;font-weight:600}
+main{flex:1}
+.v{display:none;padding:26px 30px 70px;max-width:1500px;margin:0 auto;animation:ap .3s}
+.v.on{display:block}
+@keyframes ap{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+h2{font-size:20px;color:var(--az);margin:26px 0 9px;padding-bottom:6px;border-bottom:2px solid var(--az)}
+h2:first-child{margin-top:0}
+h3{font-size:15px;color:var(--az);margin:19px 0 7px}
+p{line-height:1.62;font-size:13.5px;margin:9px 0}
+.intro{font-size:14px;line-height:1.66;color:var(--g7);max-width:1050px}
+.nota{background:var(--az05);border-left:4px solid var(--az6);padding:12px 16px;
+ border-radius:0 6px 6px 0;margin:14px 0;font-size:13px;line-height:1.6}
+.nota.w{border-left-color:var(--oro)}.nota.b{border-left-color:var(--rojo)}
+.nota.v2{border-left-color:var(--verde)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+th{background:var(--az);color:#fff;padding:7px 10px;text-align:left;font-size:11px}
+td{padding:7px 10px;border-bottom:1px solid var(--g3);vertical-align:top;line-height:1.5}
+td.k{font-family:Consolas,monospace;font-weight:600;color:var(--az);width:170px}
+td.val{font-size:11.5px;width:300px}td.p{color:var(--g7)}
+table{table-layout:fixed}
+td.rt{width:290px;word-break:break-all}td.lim{width:190px}
+
+/* Panorama */
+.encargos{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:11px;margin:16px 0}
+.encargo{display:grid;grid-template-columns:34px 1fr;gap:4px 11px;text-align:left;padding:13px 15px;
+ border:1.5px solid var(--g3);border-radius:9px;background:var(--pan);cursor:pointer;font:inherit}
+.encargo{color:var(--g9)}
+.encargo:hover{border-color:var(--az6);box-shadow:0 3px 12px var(--som)}
+.en{grid-row:1/3;width:30px;height:30px;border-radius:50%;background:var(--az);color:#fff;
+ display:grid;place-items:center;font-weight:700;font-size:14px}
+.et{font-size:13.5px;font-weight:600;color:var(--az)}
+.ed{font-size:11.5px;color:var(--g7);line-height:1.5}
+.es{grid-column:2;justify-self:start;font-size:9px;font-weight:700;padding:2px 8px;
+ border-radius:8px;margin-top:4px}
+.es.ok{background:#D9EAD3;color:#0B5C3E}.es.plan{background:#FBF3E0;color:#8A6D24}
+body[data-t="oscuro"] .es.ok{background:#1E3A2C;color:#7FD4A8}
+body[data-t="oscuro"] .es.plan{background:#3A3220;color:#E8C77E}
+.barras{margin:14px 0}
+.barra-fila{display:grid;grid-template-columns:150px 1fr 44px 2fr;gap:12px;align-items:center;
+ padding:7px 0;border-bottom:1px solid var(--g3);font-size:12px}
+.bl{font-weight:600;color:var(--az)}
+.bt2{height:9px}
+.bt{}
+.barra-fila .bt{all:unset}
+.barra-fila>.bt{display:block;height:9px;background:var(--cod);border-radius:5px;overflow:hidden}
+.bf{height:100%;width:0;border-radius:5px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.bf.alto{background:var(--verde)}.bf.medio{background:var(--oro)}.bf.bajo{background:var(--rojo)}
+.bv{font-weight:700;text-align:right;font-size:12px}
+.bn{font-size:11px;color:var(--g7);line-height:1.45}
+.cifras{display:flex;gap:11px;flex-wrap:wrap;margin:16px 0}
+.cif{background:var(--az05);border-left:3px solid var(--az6);padding:9px 16px;border-radius:0 6px 6px 0}
+.cif b{display:block;font-size:21px;color:var(--az)}
+.cif span{font-size:10.5px;color:var(--g7)}
+
+/* Flujo de autenticación */
+.flujo{display:flex;gap:7px;overflow-x:auto;padding:5px 0 12px;margin:12px 0}
+.paso{flex:1 1 0;min-width:152px;display:grid;gap:5px;text-align:left;padding:12px 13px;
+ border:1.5px solid var(--g3);border-radius:9px;background:var(--pan);cursor:pointer;font:inherit;
+ color:var(--g9);position:relative}
+.paso:hover{border-color:var(--az6)}
+.paso.on{border-color:var(--az);border-width:2px;background:var(--az05);
+ box-shadow:0 4px 14px var(--som)}
+.paso:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;
+ transform:translateY(-50%);color:var(--az6);font-weight:700;z-index:2}
+.pn{width:24px;height:24px;border-radius:50%;background:var(--az);color:#fff;display:grid;
+ place-items:center;font-size:12px;font-weight:700}
+.pt{font-size:12.5px;font-weight:600;color:var(--az)}
+.pr code{font-size:9.5px;word-break:break-all;color:var(--g9);background:var(--cod)}
+#pdet{border:1.5px solid var(--az6);border-radius:9px;padding:15px 18px;background:var(--pan);
+ min-height:96px}
+#pdet h4{font-size:14px;color:var(--az);margin-bottom:7px}
+#pdet .why{background:var(--az05);border-left:3px solid var(--oro);padding:9px 13px;
+ border-radius:0 5px 5px 0;margin-top:9px;font-size:12.5px;line-height:1.6}
+
+/* JWT */
+.jwt-wrap{display:grid;grid-template-columns:minmax(300px,1fr) minmax(300px,1.1fr);gap:16px;
+ align-items:start;margin:12px 0}
+.jwt-box{background:var(--cod);border:1.5px solid var(--g3);border-radius:9px;padding:15px 17px;
+ font-family:Consolas,monospace;font-size:12px;line-height:1.85}
+.jwt-box .lb{color:var(--g7);font-size:10.5px;display:block;margin-bottom:6px;
+ font-family:"Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:.5px}
+.claim{display:block;width:100%;text-align:left;background:none;border:none;font:inherit;
+ cursor:pointer;padding:3px 7px;border-radius:4px;border-left:3px solid transparent}
+.claim{color:var(--g9)}
+.claim:hover{background:var(--az1)}
+.claim.on{background:var(--az1);border-left-color:var(--az)}
+.ck{color:var(--az);background:none;padding:0;font-weight:600}
+.cv{color:var(--verde);background:none;padding:0}
+.cd{color:var(--g7)}
+#cdet{border:1.5px solid var(--az6);border-radius:9px;padding:15px 18px;background:var(--pan)}
+#cdet h4{font-size:14px;color:var(--az);margin-bottom:4px;font-family:Consolas,monospace}
+#cdet .org{font-size:10px;color:var(--g7);text-transform:uppercase;letter-spacing:.5px;
+ margin-bottom:9px;display:block}
+.exc{display:grid;grid-template-columns:190px 1fr;gap:12px;padding:9px 0;
+ border-bottom:1px solid var(--g3);font-size:12.5px;line-height:1.55}
+.exc b{color:var(--rojo)}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:11px;margin:12px 0}
+.ctrl{border:1.5px solid var(--g3);border-radius:9px;padding:13px 15px;background:var(--pan)}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.ch b{font-size:13px;color:var(--az)}
+.cok{font-size:8.5px;font-weight:700;padding:2px 8px;border-radius:8px;background:#D9EAD3;color:#0B5C3E}
+body[data-t="oscuro"] .cok{background:#1E3A2C;color:#7FD4A8}
+.ctrl>code{display:block;margin-bottom:7px;font-size:11px}
+.ctrl p{font-size:12px;color:var(--g7);margin:0;line-height:1.55}
+
+/* RBAC */
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
+.rol{text-align:left;padding:12px 14px;border:1.5px solid var(--g3);border-left:4px solid var(--rc);
+ border-radius:8px;background:var(--pan);cursor:pointer;font:inherit}
+.rol{color:var(--g9)}
+.rol:hover{box-shadow:0 3px 11px var(--som)}
+.rol.on{background:var(--az05);border-color:var(--rc);border-width:1.5px;border-left-width:6px}
+.rol b{display:block;font-size:12.5px;color:var(--rc);font-family:Consolas,monospace}
+.rol span{display:block;font-size:11px;color:var(--g7);margin-top:3px;line-height:1.45}
+#rdet{border:1.5px solid var(--az6);border-radius:9px;padding:14px 17px;background:var(--pan);
+ margin:12px 0;font-size:12.5px;line-height:1.6;min-height:60px}
+.matriz td.pc{font-family:Consolas,monospace;color:var(--az);white-space:nowrap;font-size:11px}
+.matriz td.pd{color:var(--g7);font-size:11.5px}
+.matriz th.rth{text-align:center;font-size:9.5px;cursor:pointer;white-space:nowrap}
+.matriz td.mc{text-align:center;font-size:16px;line-height:1}
+.matriz td.mc.si{color:var(--rc);font-weight:700}
+.matriz td.mc.no{color:var(--g3)}
+.matriz tr.dim td{opacity:.22}
+.matriz td.mc.hi{background:var(--az1)}
+.chip{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;
+ background:var(--az1);color:var(--az);margin:1px 2px 1px 0;white-space:nowrap}
+.eps td.met{font-weight:700;font-size:10px;text-align:center;white-space:nowrap}
+.m-POST{color:var(--verde)}.m-GET{color:var(--az6)}
+.eps td.rt code{font-size:10.5px}
+.eps td.sv,.eps td.es2{font-size:10.5px;color:var(--g7);white-space:nowrap}
+.eps td.pm code{font-size:10px}
+.eps td.nt{font-size:11px;color:var(--g7)}
+.eps tr.fut{opacity:.62}
+.eps tr.fut td.rt code{border:1px dashed var(--g3)}
+.eps tr.oculta{display:none}
+
+/* OWASP */
+.owasp{display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:13px;margin:14px 0}
+.ow{border:1.5px solid var(--g3);border-radius:10px;padding:15px 17px;background:var(--pan);
+ border-top:4px solid var(--g3)}
+.ow.ok{border-top-color:var(--verde)}.ow.warn{border-top-color:var(--oro)}
+.ow.bad{border-top-color:var(--rojo)}
+.ow header{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap}
+.oid{font-family:Consolas,monospace;font-weight:700;font-size:13px;color:var(--g7)}
+.ow h3{font-size:13.5px;margin:0;flex:1;color:var(--az)}
+.oe{font-size:8.5px;font-weight:700;padding:2px 9px;border-radius:9px}
+.oe.ok{background:#D9EAD3;color:#0B5C3E}.oe.warn{background:#FBF3E0;color:#8A6D24}
+.oe.bad{background:#F4CCCC;color:#8B1A13}
+body[data-t="oscuro"] .oe.ok{background:#1E3A2C;color:#7FD4A8}
+body[data-t="oscuro"] .oe.warn{background:#3A3220;color:#E8C77E}
+body[data-t="oscuro"] .oe.bad{background:#3A2321;color:#FF9B91}
+.oq{font-size:11.5px;color:var(--g7);font-style:italic;margin:0 0 9px;line-height:1.5}
+.od{font-size:12.5px;line-height:1.62}
+.ow footer{margin-top:10px;padding-top:8px;border-top:1px solid var(--g3)}
+.ow footer code{font-size:9.5px;color:var(--g7)}
+
+/* Hardening */
+.lim{font-size:12px}
+.rt code{font-size:11px}
+@media print{header.top{position:static}.v{display:block!important;page-break-before:always}
+ .tab,.bt{display:none}}
+</style></head><body data-t="claro">
+
+<header class="top">
+ <div class="tit">
+  <h1>Diseño de Controles de Seguridad · Ayni Bank</h1>
+  <span class="s">APF2 · Estado tras el despliegue en AWS</span>
+  <div class="acc"><button class="bt" id="tema">🌙 Oscuro</button></div>
+ </div>
+ <nav class="tabs">
+  <button class="tab on" data-v="pan">Panorama</button>
+  <button class="tab" data-v="auth">1 · Autenticación (JWT)</button>
+  <button class="tab" data-v="rbac">2 · Control de acceso (RBAC)</button>
+  <button class="tab" data-v="owasp">3 · Mitigación OWASP</button>
+  <button class="tab" data-v="hard">4 · CORS, trazabilidad y límite de tasa</button>
+ </nav>
+</header>
+
+<main>
+<!-- ══════════ PANORAMA ══════════ -->
+<section class="v on" id="v-pan">
+ <h2>Qué pide el taller y dónde está respondido</h2>
+ <p class="intro">El taller pide diseñar los controles de seguridad del proyecto en tres frentes
+ —autenticación, control de acceso y mitigación OWASP— y deja para la semana siguiente otros tres:
+ la configuración de CORS, la trazabilidad de los registros y el límite de tasa del endpoint más
+ crítico. <b>Este documento responde a los seis.</b></p>
+ <p class="intro">Todo lo que sigue está <b>verificado contra el código</b> de la rama
+ <code>develop</code>. Cuando algo no está implantado se dice, y se dice qué falta: un informe de
+ seguridad que solo describe lo que funciona no sirve para decidir nada.</p>
+ <div class="encargos"><button class="encargo" data-ir="auth"><span class="en">1</span><span class="et">Arquitectura de Autenticación</span><span class="ed">Definir el flujo, qué información <b>no sensible</b> va en el payload del JWT y el tiempo de expiración.</span><span class="es ok">Respondido</span></button><button class="encargo" data-ir="rbac"><span class="en">2</span><span class="et">Matriz de Control de Acceso (RBAC)</span><span class="ed">Listar los roles del sistema y documentar a qué endpoints tiene acceso exclusivo cada uno.</span><span class="es ok">Respondido</span></button><button class="encargo" data-ir="owasp"><span class="en">3</span><span class="et">Mitigación OWASP</span><span class="ed">Indicar técnicamente cómo el framework actual ayuda a mitigar las inyecciones SQL y los ataques XSS.</span><span class="es ok">Respondido</span></button><button class="encargo" data-ir="hard"><span class="en">4</span><span class="et">Configuración del backend (CORS)</span><span class="ed">Qué dominios exactos están permitidos en el código actual.</span><span class="es ok">Respondido</span></button><button class="encargo" data-ir="hard"><span class="en">5</span><span class="et">Trazabilidad</span><span class="ed">Qué valor se usará para los registros y el formato JSON del código de comunicación.</span><span class="es plan">Plan definido</span></button><button class="encargo" data-ir="hard"><span class="en">6</span><span class="et">Endpoint más crítico y límite de tasa</span><span class="ed">Identificar el endpoint más crítico de la API y proponer cuántas peticiones por minuto se van a configurar.</span><span class="es plan">Plan definido</span></button></div>
+
+ <h2>Estado de madurez, control por control</h2>
+ <p>La altura de cada barra no es una impresión: sale de contar qué está implantado y verificado
+ frente a qué está diseñado pero pendiente.</p>
+ <div class="barras"><div class="barra-fila"><span class="bl">Autenticación</span><div class="bt"><div class="bf alto" data-v="100"></div></div><span class="bv">100%</span><span class="bn">APF2: validación del JWT centralizada en el gateway (AYNI-122), cierre de sesión que invalida la familia de tokens y segundo factor por correo real con Amazon SES.</span></div><div class="barra-fila"><span class="bl">Autorización (RBAC)</span><div class="bt"><div class="bf medio" data-v="75"></div></div><span class="bv">75%</span><span class="bn">Catálogo de roles y permisos sembrado. APF2: el gateway exige token en todas las rutas de dinero y la identidad sale solo del token. Falta el filtro por permiso.</span></div><div class="barra-fila"><span class="bl">Criptografía</span><div class="bt"><div class="bf alto" data-v="100"></div></div><span class="bv">100%</span><span class="bn">Argon2id, AES-256-GCM y firma HS256. APF2: TLS 1.2/1.3 con nota A (Let&#x27;s Encrypt), TLS obligatorio hasta RDS (sslmode=require) y cifrado en reposo en RDS y S3.</span></div><div class="barra-fila"><span class="bl">Protección de inyección</span><div class="bt"><div class="bf alto" data-v="95"></div></div><span class="bv">95%</span><span class="bn">JPA parametrizado y React con escapado por defecto. APF2: Content-Security-Policy en producción como segunda barrera contra XSS.</span></div><div class="barra-fila"><span class="bl">Configuración</span><div class="bt"><div class="bf alto" data-v="90"></div></div><span class="bv">90%</span><span class="bn">APF2: HSTS, CSP, X-Frame-Options, COOP y CORP en Caddy; solo los puertos 80/443 abiertos; la aplicación usa ayni_app, sin privilegios de superusuario en RDS.</span></div><div class="barra-fila"><span class="bl">Trazabilidad</span><div class="bt"><div class="bf medio" data-v="75"></div></div><span class="bv">75%</span><span class="bn">APF2: pista de auditoría también en core-banking (operaciones y rechazos), métricas en Prometheus/Grafana y registros JSON de Caddy. Falta el correlation ID.</span></div><div class="barra-fila"><span class="bl">Límite de tasa</span><div class="bt"><div class="bf bajo" data-v="0"></div></div><span class="bv">0%</span><span class="bn">Diseñado (tabla de límites por endpoint). Su implantación queda para el siguiente sprint.</span></div></div>
+ <div class="nota b"><b>Qué cambió en el APF2.</b> El hueco principal del APF1 está cerrado: la validación del JWT ya está <b>centralizada en el gateway</b> (<code>AYNI-122</code>). Además, producción en AWS añade cabeceras CSP/HSTS/COOP/CORP, TLS con nota A verificado con Nmap y testssl, auditoría de operaciones en core y monitoreo con Grafana. Lo que queda abierto se dice: el límite de tasa está diseñado pero no implantado.</div>
+
+ <div class="cifras">
+  <div class="cif"><b>5</b><span>roles definidos</span></div>
+  <div class="cif"><b>12</b><span>permisos</span></div>
+  <div class="cif"><b>13</b><span>endpoints mapeados</span></div>
+  <div class="cif"><b>7 / 10</b><span>OWASP mitigados</span></div>
+  <div class="cif"><b>3 / 10</b><span>OWASP parciales</span></div>
+  <div class="cif"><b>0</b><span>usos de innerHTML</span></div>
+ </div>
+</section>
+
+<!-- ══════════ AUTENTICACIÓN ══════════ -->
+<section class="v" id="v-auth">
+ <h2>1 · Arquitectura de autenticación</h2>
+ <p class="intro">Autenticación en <b>dos factores obligatorios</b> que emite <b>dos credenciales
+ con propósitos distintos</b>: un token de acceso corto que viaja en cada petición, y un token de
+ renovación largo que solo sirve para pedir uno nuevo. Separarlos es lo que permite que el de
+ acceso caduque en quince minutos sin que el usuario note nada.</p>
+
+ <h3>El flujo, paso a paso</h3>
+ <p>Pulsa cualquier paso para ver qué ocurre y por qué.</p>
+ <div class="flujo"><button class="paso" data-p="0"><span class="pn">1</span><span class="pt">Credenciales</span><span class="pr"><code>POST /api/v1/sesion</code></span></button><button class="paso" data-p="1"><span class="pn">2</span><span class="pt">Desafío</span><span class="pr"><code>Respuesta 202 · desafío</code></span></button><button class="paso" data-p="2"><span class="pn">3</span><span class="pt">Segundo factor</span><span class="pr"><code>POST /api/v1/sesion/segundo-factor</code></span></button><button class="paso" data-p="3"><span class="pn">4</span><span class="pt">Emisión</span><span class="pr"><code>200 · token + cookie</code></span></button><button class="paso" data-p="4"><span class="pn">5</span><span class="pt">Uso</span><span class="pr"><code>Authorization: Bearer …</code></span></button><button class="paso" data-p="5"><span class="pn">6</span><span class="pt">Renovación</span><span class="pr"><code>POST /api/v1/sesion/renovacion</code></span></button></div>
+ <div id="pdet"></div>
+
+ <h3>Anatomía del token de acceso</h3>
+ <p>Pulsa cualquier campo del payload para ver qué es y por qué está —o no está— ahí.</p>
+ <div class="jwt-wrap">
+  <div class="jwt-box"><span class="lb">Payload · descodificado</span>{<button class="claim" data-c="0"><code class="ck">"iss"</code><span class="cd">:</span><code class="cv">"ayni-identity-service"</code></button><button class="claim" data-c="1"><code class="ck">"sub"</code><span class="cd">:</span><code class="cv">"a3f7c2e1-4b8d-4f2a-9c1e-7d5b3a8f0e42"</code></button><button class="claim" data-c="2"><code class="ck">"estado"</code><span class="cd">:</span><code class="cv">"ACTIVO"</code></button><button class="claim" data-c="3"><code class="ck">"iat"</code><span class="cd">:</span><code class="cv">"1758391451"</code></button><button class="claim" data-c="4"><code class="ck">"exp"</code><span class="cd">:</span><code class="cv">"1758392351"</code></button><button class="claim" data-c="5"><code class="ck">"jti"</code><span class="cd">:</span><code class="cv">"5f2b1c8a-…"</code></button>}</div>
+  <div id="cdet"></div>
+ </div>
+ <div class="nota w"><b>Un JWT no está cifrado, está firmado.</b> Cualquiera que intercepte el
+ token puede leer su contenido pegándolo en jwt.io: el Base64 no protege nada. Lo que la firma
+ garantiza es que <b>nadie puede modificarlo</b> sin la clave. Por eso la regla no es «qué quiero
+ llevar» sino <b>«qué puedo permitirme que sea público»</b>.</div>
+
+ <h3>Qué NO va en el payload, y por qué</h3>
+ <div class="exc"><b>Correo electrónico</b><span>Dato personal. Un JWT es Base64, <b>no cifrado</b>: cualquiera que lo intercepte lo lee en claro pegándolo en jwt.io.</span></div><div class="exc"><b>Nombre y apellidos</b><span>Dato personal, y además cambia: obligaría a reemitir el token cuando el KYC verifica la identidad.</span></div><div class="exc"><b>Número de documento</b><span>Dato personal sensible. Ni siquiera se guarda en claro en la base: va cifrado con AES-256-GCM.</span></div><div class="exc"><b>Roles y permisos</b><span><b>La decisión deliberada que más se discute.</b> Meterlos en el payload evita una consulta por petición, pero crea un problema peor: si a un usuario se le retira un permiso, su token sigue diciendo que lo tiene hasta que caduque. En banca, una ventana de 15 minutos con un permiso ya revocado es inaceptable. La autorización se resuelve <b>contra la base en cada petición</b>.</span></div><div class="exc"><b>Saldo o datos de cuenta</b><span>Cambia a cada segundo. Un token que lo lleve estaría mintiendo casi siempre.</span></div><div class="exc"><b>La contraseña o su derivación</b><span>Nunca sale del servicio de identidad.</span></div>
+
+ <h3>Parámetros del token</h3>
+ <table><tr><th>Parámetro</th><th>Valor</th><th>Justificación</th></tr><tr><td class="k">Algoritmo de firma</td><td class="val"><code>HS256 (HMAC-SHA256)</code></td><td class="p">Simétrico. Es suficiente porque <b>el único emisor y el único validador somos nosotros</b>: no hay terceros que necesiten verificar sin poder firmar. Si mañana un tercero tuviera que validar tokens sin poder emitirlos, habría que pasar a RS256.</td></tr><tr><td class="k">Biblioteca</td><td class="val"><code>Nimbus JOSE + JWT 10.3</code></td><td class="p">Implementación de referencia de los estándares JOSE. Se fija la versión en el POM padre para que todos los servicios usen la misma.</td></tr><tr><td class="k">Longitud mínima de clave</td><td class="val"><code>256 bits (32 bytes)</code></td><td class="p">Se comprueba <b>en el arranque</b>, no al firmar. Si la clave es corta el servicio no levanta, en lugar de fallar en el primer ingreso de un usuario real.</td></tr><tr><td class="k">Vigencia del token de acceso</td><td class="val"><code>15 minutos</code></td><td class="p">Corto a propósito: un token robado deja de servir pronto. El coste de que sea corto lo absorbe la renovación automática, que es transparente para el usuario.</td></tr><tr><td class="k">Vigencia del token de renovación</td><td class="val"><code>7 días</code></td><td class="p">Largo para no pedir contraseña cada día, pero acotado. Se guarda como <b>huella SHA-256</b>, nunca en claro: una base de datos filtrada no entrega sesiones activas.</td></tr><tr><td class="k">Transporte de la renovación</td><td class="val"><code>Cookie HttpOnly · Secure · SameSite=Strict</code></td><td class="p"><b>HttpOnly</b> para que JavaScript no pueda leerla ni aunque exista un XSS. <b>SameSite=Strict</b> porque solo se usa en peticiones que nacen en la propia aplicación; con <code>Lax</code> viajaría también en navegaciones desde otros sitios, que es la puerta de un CSRF.</td></tr><tr><td class="k">Transporte del acceso</td><td class="val"><code>Cabecera `Authorization: Bearer`</code></td><td class="p">En memoria del cliente, nunca en <code>localStorage</code>: lo que está en <code>localStorage</code> lo lee cualquier script inyectado.</td></tr></table>
+
+ <h3>Controles complementarios de sesión</h3>
+ <div class="ctrls"><div class="ctrl"><div class="ch"><b>Bloqueo progresivo</b><span class="cok">Implantado</span></div><code>5 min → ×2 desde el 6.º fallo → techo de 1 h</code><p>El techo existe para que nadie pueda dejar fuera al titular indefinidamente fallando a propósito contra su cuenta.</p></div><div class="ctrl"><div class="ch"><b>Respuesta indistinguible</b><span class="cok">Implantado</span></div><code>Mismo cuerpo y mismo tiempo exista o no la cuenta</code><p>Impide enumerar clientes del banco probando correos. Ver ADR-0008.</p></div><div class="ctrl"><div class="ch"><b>Rotación con detección de robo</b><span class="cok">Implantado</span></div><code>Familias de tokens · reutilización ⇒ cierre total</code><p>Si un token ya consumido vuelve a llegar, hay dos copias: cae la sesión del atacante y la del titular.</p></div><div class="ctrl"><div class="ch"><b>Segundo factor obligatorio</b><span class="cok">Implantado</span></div><code>TOTP · RFC 6238 · ventana de 2 min</code><p>El secreto se guarda cifrado, no derivado, porque el servidor necesita recuperarlo para calcular el código.</p></div><div class="ctrl"><div class="ch"><b>Auditoría de accesos</b><span class="cok">Implantado</span></div><code>7 tipos de evento en `identity.evento_auditoria`</code><p>Tabla y no fichero de log: la IP es dato personal y necesita retención y control de acceso propios (Ley N.º 29733).</p></div></div>
+</section>
+
+<!-- ══════════ RBAC ══════════ -->
+<section class="v" id="v-rbac">
+ <h2>2 · Matriz de control de acceso</h2>
+ <p class="intro">El taller pide listar <b>tres</b> roles. El sistema tiene <b>cinco</b>, y no por
+ exceso: los cinco existen porque el modelo aplica <b>segregación de funciones</b>, el control
+ clásico contra el fraude interno en banca. <b>No hay rol de superadministrador</b>, y es
+ intencional: nadie completa por sí solo una operación sensible.</p>
+ <div class="nota v2"><b>Esto no es una propuesta: está sembrado en la base de datos.</b> Los cinco
+ roles, los doce permisos y sus asignaciones se crean en la migración
+ <code>V1__catalogo_de_roles_y_permisos.sql</code>. La matriz de abajo es una lectura literal de
+ esa tabla.</div>
+
+ <h3>Los roles</h3>
+ <p>Pulsa un rol para aislar sus permisos en la matriz y filtrar los endpoints.</p>
+ <div class="roles"><button class="rol" data-r="CLIENTE" style="--rc:#0A5A96"><b>Cliente</b><span>Opera únicamente sus propias cuentas.</span></button><button class="rol" data-r="OPERADOR" style="--rc:#C59E41"><b>Operador</b><span>Consulta clientes e inicia bloqueos. No aprueba por sí solo.</span></button><button class="rol" data-r="SUPERVISOR" style="--rc:#0F7A52"><b>Supervisor</b><span>Aprueba lo iniciado por el operador.</span></button><button class="rol" data-r="AUDITOR" style="--rc:#6B4FA8"><b>Auditor</b><span>Lectura total, incluida la pista de auditoría. No escribe nada.</span></button><button class="rol" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E"><b>Oficial de Cumplimiento</b><span>Revisa KYC y marca operaciones sospechosas. No mueve dinero.</span></button></div>
+ <div id="rdet">Selecciona un rol para ver su alcance y los endpoints que le corresponden.</div>
+
+ <h3>Matriz rol × permiso</h3>
+ <table class="matriz"><thead><tr><th>Permiso</th><th>Qué autoriza</th><th class="rth" data-r="CLIENTE" style="--rc:#0A5A96">Cliente</th><th class="rth" data-r="OPERADOR" style="--rc:#C59E41">Operador</th><th class="rth" data-r="SUPERVISOR" style="--rc:#0F7A52">Supervisor</th><th class="rth" data-r="AUDITOR" style="--rc:#6B4FA8">Auditor</th><th class="rth" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">Oficial de Cumplimiento</th></tr></thead>
+  <tbody><tr><td class="pc"><code>cuenta:leer</code></td><td class="pd">Consultar cuentas propias</td><td class="mc si" data-r="CLIENTE" style="--rc:#0A5A96">●</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>cuenta:leer_todas</code></td><td class="pd">Consultar cuentas de cualquier cliente</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc si" data-r="OPERADOR" style="--rc:#C59E41">●</td><td class="mc si" data-r="SUPERVISOR" style="--rc:#0F7A52">●</td><td class="mc si" data-r="AUDITOR" style="--rc:#6B4FA8">●</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>transferencia:iniciar</code></td><td class="pd">Iniciar una transferencia</td><td class="mc si" data-r="CLIENTE" style="--rc:#0A5A96">●</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>transferencia:aprobar</code></td><td class="pd">Aprobar una transferencia iniciada por otro</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc si" data-r="SUPERVISOR" style="--rc:#0F7A52">●</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>tarjeta:administrar</code></td><td class="pd">Congelar, descongelar y ajustar límites de la tarjeta propia</td><td class="mc si" data-r="CLIENTE" style="--rc:#0A5A96">●</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>tarjeta:revelar_pan</code></td><td class="pd">Revelar el PAN completo, con MFA</td><td class="mc si" data-r="CLIENTE" style="--rc:#0A5A96">●</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>cliente:leer</code></td><td class="pd">Consultar la ficha de un cliente</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc si" data-r="OPERADOR" style="--rc:#C59E41">●</td><td class="mc si" data-r="SUPERVISOR" style="--rc:#0F7A52">●</td><td class="mc si" data-r="AUDITOR" style="--rc:#6B4FA8">●</td><td class="mc si" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">●</td></tr><tr><td class="pc"><code>cliente:bloquear_iniciar</code></td><td class="pd">Iniciar el bloqueo de un cliente</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc si" data-r="OPERADOR" style="--rc:#C59E41">●</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>cliente:bloquear_aprobar</code></td><td class="pd">Aprobar el bloqueo de un cliente</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc si" data-r="SUPERVISOR" style="--rc:#0F7A52">●</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr><tr><td class="pc"><code>kyc:revisar</code></td><td class="pd">Revisar manualmente una solicitud de onboarding</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc si" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">●</td></tr><tr><td class="pc"><code>kyc:marcar_sospechoso</code></td><td class="pd">Marcar una operación como sospechosa</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc no" data-r="AUDITOR" style="--rc:#6B4FA8">·</td><td class="mc si" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">●</td></tr><tr><td class="pc"><code>auditoria:leer</code></td><td class="pd">Leer la pista de auditoría completa</td><td class="mc no" data-r="CLIENTE" style="--rc:#0A5A96">·</td><td class="mc no" data-r="OPERADOR" style="--rc:#C59E41">·</td><td class="mc no" data-r="SUPERVISOR" style="--rc:#0F7A52">·</td><td class="mc si" data-r="AUDITOR" style="--rc:#6B4FA8">●</td><td class="mc no" data-r="OFICIAL_CUMPLIMIENTO" style="--rc:#B3261E">·</td></tr></tbody></table>
+
+ <h3>Endpoints y quién accede a cada uno</h3>
+ <p>Las filas atenuadas corresponden a endpoints aún no implementados; se incluyen porque el
+ control de acceso se diseña antes de escribirlos, no después.</p>
+ <table class="eps"><thead><tr><th>Método</th><th>Ruta</th><th>Servicio</th><th>Permiso exigido</th>
+  <th>Roles</th><th>Estado</th><th>Nota</th></tr></thead><tbody><tr class="" data-roles="público"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/registro</code></td><td class="sv">identity</td><td class="pm"><code>—</code></td><td><span class="chip r-público">público</span></td><td class="es2">Implantado</td><td class="nt">Alta de usuario. Público por necesidad. Protegido por respuesta indistinguible (ADR-0008) y, cuando se implante, por límite de tasa.</td></tr><tr class="" data-roles="público"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/sesion</code></td><td class="sv">identity</td><td class="pm"><code>—</code></td><td><span class="chip r-público">público</span></td><td class="es2">Implantado</td><td class="nt"><b>El endpoint más crítico del sistema hoy.</b> Puerta de entrada y blanco natural de fuerza bruta y credential stuffing.</td></tr><tr class="" data-roles="público"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/sesion/segundo-factor</code></td><td class="sv">identity</td><td class="pm"><code>— (desafío válido)</code></td><td><span class="chip r-público">público</span></td><td class="es2">Implantado</td><td class="nt">Requiere un desafío vigente y no consumido. No es accesible directamente.</td></tr><tr class="" data-roles="público"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/sesion/renovacion</code></td><td class="sv">identity</td><td class="pm"><code>— (cookie válida)</code></td><td><span class="chip r-público">público</span></td><td class="es2">Implantado</td><td class="nt">Requiere la cookie HttpOnly. Detecta reutilización.</td></tr><tr class="" data-roles="CLIENTE"><td class="met m-GET">GET</td><td class="rt"><code>/api/v1/usuarios/{id}/resumen</code></td><td class="sv">identity</td><td class="pm"><code>cuenta:leer</code></td><td><span class="chip r-CLIENTE">CLIENTE</span></td><td class="es2">Implantado</td><td class="nt"><b>Autorización por recurso</b>: el <code>{id}</code> debe coincidir con el <code>sub</code> del token.</td></tr><tr class="" data-roles="CLIENTE"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/solicitudes/{id}/documentos/url-de-subida</code></td><td class="sv">identity</td><td class="pm"><code>—</code></td><td><span class="chip r-CLIENTE">CLIENTE</span></td><td class="es2">Implantado</td><td class="nt">Devuelve una URL pre-firmada de MinIO con vigencia de 5 minutos.</td></tr><tr class="" data-roles="CLIENTE"><td class="met m-GET">GET</td><td class="rt"><code>/api/v1/cuentas/titular/{usuarioId}</code></td><td class="sv">core-banking</td><td class="pm"><code>cuenta:leer</code></td><td><span class="chip r-CLIENTE">CLIENTE</span></td><td class="es2">Implantado</td><td class="nt">Autorización por recurso: solo las cuentas del propio titular.</td></tr><tr class="" data-roles="interno"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/kyc/verify-match</code></td><td class="sv">kyc</td><td class="pm"><code>—</code></td><td><span class="chip r-interno">interno</span></td><td class="es2">Implantado</td><td class="nt">Cotejo facial. No se expone al cliente: lo llama <code>identity</code>.</td></tr><tr class="fut" data-roles="CLIENTE"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/transferencias</code></td><td class="sv">core-banking</td><td class="pm"><code>transferencia:iniciar</code></td><td><span class="chip r-CLIENTE">CLIENTE</span></td><td class="es2">HU-07 · Sprint 4</td><td class="nt"><b>Será el endpoint más crítico cuando exista.</b> Exigirá <code>Idempotency-Key</code> obligatoria.</td></tr><tr class="fut" data-roles="SUPERVISOR"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/transferencias/{id}/aprobar</code></td><td class="sv">core-banking</td><td class="pm"><code>transferencia:aprobar</code></td><td><span class="chip r-SUPERVISOR">SUPERVISOR</span></td><td class="es2">HU-07 · Sprint 4</td><td class="nt">Segregación de funciones: quien inició no puede aprobar.</td></tr><tr class="fut" data-roles="CLIENTE"><td class="met m-GET">GET</td><td class="rt"><code>/api/v1/tarjetas/{id}/pan</code></td><td class="sv">core-banking</td><td class="pm"><code>tarjeta:revelar_pan</code></td><td><span class="chip r-CLIENTE">CLIENTE</span></td><td class="es2">HU-09 · Sprint 5</td><td class="nt">Exigirá reautenticación con segundo factor.</td></tr><tr class="fut" data-roles="OPERADOR"><td class="met m-POST">POST</td><td class="rt"><code>/api/v1/clientes/{id}/bloqueo</code></td><td class="sv">identity</td><td class="pm"><code>cliente:bloquear_iniciar</code></td><td><span class="chip r-OPERADOR">OPERADOR</span></td><td class="es2">Sprint 7</td><td class="nt">Inicia el bloqueo; no lo completa.</td></tr><tr class="fut" data-roles="AUDITOR"><td class="met m-GET">GET</td><td class="rt"><code>/api/v1/auditoria</code></td><td class="sv">identity</td><td class="pm"><code>auditoria:leer</code></td><td><span class="chip r-AUDITOR">AUDITOR</span></td><td class="es2">Sprint 7</td><td class="nt">Lectura de la pista completa. Solo lectura por diseño.</td></tr></tbody></table>
+
+ <div class="nota"><b>El permiso no basta: hace falta autorización por recurso.</b> Que un cliente
+ tenga <code>cuenta:leer</code> no significa que pueda leer <i>cualquier</i> cuenta, sino
+ únicamente las suyas. Por eso los endpoints por titular comparan el identificador de la ruta con
+ el <code>sub</code> del token. Confundir ambas cosas es la vulnerabilidad <b>A01</b> de OWASP, y
+ es de las más frecuentes.</div>
+</section>
+
+<!-- ══════════ OWASP ══════════ -->
+<section class="v" id="v-owasp">
+ <h2>3 · Mitigación OWASP Top 10 (2021)</h2>
+ <p class="intro">El taller pregunta específicamente por <b>inyección SQL</b> y <b>XSS</b>, que
+ son la categoría <b>A03</b>. Se responde esa con detalle y se cubren las diez, porque un informe
+ de seguridad que solo mira dos categorías da una falsa sensación de cobertura.</p>
+ <div class="nota"><b>Cómo leer el estado.</b> <span class="oe ok">MITIGADO</span> significa que
+ hay un control activo y verificado en el código. <span class="oe warn">PARCIAL</span> significa
+ que hay controles pero falta algo concreto, que se indica. No hay ninguna categoría sin analizar.</div>
+ <div class="owasp"><article class="ow warn" data-o="0"><header><span class="oid">A01</span><h3>Pérdida de control de acceso</h3><span class="oe warn">PARCIAL</span></header><p class="oq">Autorización rota: acceder a recursos de otro usuario cambiando un identificador en la URL.</p><div class="od"><b>Lo que hay.</b> El <code>sub</code> del JWT es la única fuente de identidad; los endpoints por titular comparan el <code>{usuarioId}</code> de la ruta con el del token. Los permisos se consultan en la base en cada petición, nunca se leen del token. No existe rol de superadministrador.<br><b>APF2.</b> La validación del JWT está centralizada en el gateway (<code>AYNI-122</code>, ADR-0027): valida firma y caducidad, borra cualquier <code>X-Ayni-Usuario</code> entrante y lo reescribe con el <code>sub</code> del token. Un servicio nuevo no puede olvidarse de validar.</div><footer><code>services/…/EmisorDeTokensJwt.java · V1__catalogo_de_roles_y_permisos.sql</code></footer></article><article class="ow ok" data-o="1"><header><span class="oid">A02</span><h3>Fallos criptográficos</h3><span class="oe ok">MITIGADO</span></header><p class="oq">Datos sensibles almacenados o transmitidos sin protección adecuada.</p><div class="od"><b>Contraseñas con Argon2id</b>, el algoritmo recomendado por OWASP, con los parámetros que esa misma guía propone; una restricción CHECK en la base impide guardar algo que no empiece por <code>$argon2</code>.<br><b>Número de documento y secreto TOTP cifrados con AES-256-GCM.</b> El documento se guarda cifrado y se conservan solo los cuatro últimos dígitos en claro para poder mostrarlos sin descifrar.<br><b>Tokens de renovación como huella SHA-256</b>: el valor en claro solo existe en el navegador.<br><b>Firma del JWT con clave de 256 bits</b>, verificada en el arranque.</div><footer><code>V2__usuario_persona_y_solicitud_de_onboarding.sql · V4__inicio_de_sesion_y_segundo_factor.sql</code></footer></article><article class="ow ok" data-o="2"><header><span class="oid">A03</span><h3>Inyección (SQL / XSS)</h3><span class="oe ok">MITIGADO</span></header><p class="oq">Entrada no confiable interpretada como código: SQL en la base, HTML o JavaScript en el navegador.</p><div class="od"><b>SQL.</b> Todo el acceso a datos pasa por Spring Data JPA, que genera <b>sentencias preparadas</b>: los valores viajan como parámetros vinculados y nunca se concatenan. La auditoría del repositorio encontró <b>exactamente dos consultas nativas</b>, y las dos son seguras: <code>SELECT nextval(&#x27;core.secuencia_cuenta&#x27;)</code> no recibe ninguna entrada, y <code>treaVigente</code> usa <code>:producto</code> con <code>@Param</code>. Además la base valida con restricciones CHECK y expresiones regulares.<br><b>XSS.</b> React <b>escapa por defecto</b> todo lo que se interpola en JSX. La auditoría del frontend encontró <b>cero usos de <code>dangerouslySetInnerHTML</code>, <code>innerHTML</code> y <code>eval</code></b>, que son las tres formas de saltarse ese escapado.</div><footer><code>RepositoriosDeCore.java · web/ayni-web/src/</code></footer></article><article class="ow ok" data-o="3"><header><span class="oid">A04</span><h3>Diseño inseguro</h3><span class="oe ok">MITIGADO</span></header><p class="oq">Fallos que no se arreglan con código porque están en el diseño.</p><div class="od">Los invariantes del dominio son controles de seguridad: <b>el saldo no se almacena</b> (es la suma de asientos, así que no se puede alterar sin dejar rastro), <b>un asiento no se edita, se compensa</b>, y <b>toda operación monetaria es idempotente</b>. La segregación de funciones está en el modelo de roles: no existe superadministrador y quien inicia no aprueba.</div><footer><code>ADR-0011 · ADR-0003 · V2__cuenta_asientos_y_outbox.sql</code></footer></article><article class="ow warn" data-o="4"><header><span class="oid">A05</span><h3>Configuración de seguridad incorrecta</h3><span class="oe warn">PARCIAL</span></header><p class="oq">Valores por omisión inseguros, servicios expuestos de más, cabeceras ausentes.</p><div class="od"><b>Lo que hay.</b> Solo el gateway y la web publican puerto; los demás contenedores viven en la red privada. CORS con <b>lista explícita de orígenes</b>, nunca comodín. <code>poweredByHeader: false</code> oculta la versión del framework. Los secretos van por variables de entorno y Gitleaks los busca en cada Pull Request.<br><b>Lo que falta.</b> No hay <b>cabeceras de seguridad</b> en la web: faltan <code>Content-Security-Policy</code>, <code>X-Frame-Options</code>, <code>Strict-Transport-Security</code> y <code>X-Content-Type-Options</code>. Y el usuario de base de datos es <b>SUPERUSER</b>, hallazgo del taller de la semana 6 (<code>AYNI-152</code>).</div><footer><code>gateway/application.yml · next.config.ts</code></footer></article><article class="ow ok" data-o="5"><header><span class="oid">A06</span><h3>Componentes vulnerables y desactualizados</h3><span class="oe ok">MITIGADO</span></header><p class="oq">Dependencias con vulnerabilidades conocidas.</p><div class="od"><b>Trivy</b> escanea las seis imágenes en cada Pull Request y <b>bloquea la fusión</b> ante cualquier vulnerabilidad ALTA o CRÍTICA. Las excepciones se declaran una a una en <code>.trivyignore.yaml</code> <b>con justificación y fecha de caducidad</b>, de modo que no se quedan olvidadas.</div><footer><code>.github/workflows/ci.yml · .trivyignore.yaml</code></footer></article><article class="ow ok" data-o="6"><header><span class="oid">A07</span><h3>Fallos de identificación y autenticación</h3><span class="oe ok">MITIGADO</span></header><p class="oq">Credenciales débiles, sesiones mal gestionadas, ausencia de segundo factor.</p><div class="od"><b>Segundo factor TOTP obligatorio.</b> <b>Bloqueo progresivo</b> tras fallos repetidos, con techo de una hora para que no se pueda dejar fuera al titular. <b>Respuesta indistinguible</b> ante correo inexistente. <b>Rotación de sesión con detección de reutilización</b>: si un token ya consumido vuelve a llegar, cae la familia entera. Política de contraseña validada en cliente y servidor.</div><footer><code>V4__inicio_de_sesion_y_segundo_factor.sql · ADR-0008 · ADR-0010</code></footer></article><article class="ow ok" data-o="7"><header><span class="oid">A08</span><h3>Fallos de integridad del software y los datos</h3><span class="oe ok">MITIGADO</span></header><p class="oq">Código o datos alterados sin detección.</p><div class="od"><b>Los documentos KYC llevan hash SHA-256</b>, lo que permite detectar si el objeto se alteró en el almacenamiento después de subirse. El <b>patrón Outbox</b> garantiza que el evento y el hecho que lo origina se escriben en la misma transacción. <b>ArchUnit rompe la compilación</b> si el paquete de dominio importa framework.</div><footer><code>V5__documentos_kyc.sql · ADR-0003 · ADR-0002</code></footer></article><article class="ow warn" data-o="8"><header><span class="oid">A09</span><h3>Fallos de registro y monitorización</h3><span class="oe warn">PARCIAL</span></header><p class="oq">No se detecta un ataque porque no queda registro de él.</p><div class="od"><b>Lo que hay.</b> <code>identity.evento_auditoria</code> registra siete tipos de evento con IP y agente de usuario, incluida la reutilización de token. Prometheus, Grafana y Loki están desplegados.<br><b>Lo que falta.</b> Los registros <b>no son JSON estructurado</b> y <b>no hay correlation ID</b>, así que no se puede seguir una petición a través de los cinco servicios. Es exactamente el encargo de trazabilidad de la próxima semana.</div><footer><code>V4__inicio_de_sesion_y_segundo_factor.sql · infra/docker/</code></footer></article><article class="ow ok" data-o="9"><header><span class="oid">A10</span><h3>Falsificación de peticiones del lado del servidor (SSRF)</h3><span class="oe ok">MITIGADO</span></header><p class="oq">El servidor hace peticiones a direcciones que controla el atacante.</p><div class="od">Las únicas llamadas salientes van a destinos <b>fijos y configurados</b>: el servicio de KYC y MinIO, ambos por nombre de servicio dentro de la red privada. <b>Ninguna toma una URL de la entrada del usuario.</b> Las URL pre-firmadas las genera el servidor, no las recibe.</div><footer><code>ConfiguracionDelClienteKyc.java · MinioAlmacenDeDocumentos.java</code></footer></article></div>
+</section>
+
+<!-- ══════════ HARDENING ══════════ -->
+<section class="v" id="v-hard">
+ <h2>4 · Configuración del backend: CORS</h2>
+ <p class="intro">La configuración vive en el gateway, que es <b>el único componente con puerto
+ publicado</b> junto con la web. Los otros nueve contenedores están en la red privada del compose,
+ y eso no es comodidad: es lo que garantiza que el CORS y la validación del token
+ <b>no se puedan esquivar</b> llamando directamente al servicio de detrás.</p>
+ <table><tr><th>Parámetro</th><th>Valor actual</th><th>Por qué</th></tr><tr><td class="k"><code>allowedOrigins</code></td><td class="val">http://localhost:3000, http://localhost:3500</td><td class="p"><b>Lista explícita, nunca <code>*</code>.</b> Con comodín el navegador prohíbe enviar credenciales, y nuestro token de renovación viaja en cookie. En staging y producción se sustituye por el dominio real mediante la variable <code>AYNI_ORIGENES_PERMITIDOS</code>.</td></tr><tr><td class="k"><code>allowedMethods</code></td><td class="val">GET, POST, PUT, PATCH, DELETE, OPTIONS</td><td class="p"><code>OPTIONS</code> es imprescindible: es la petición de comprobación previa que el navegador envía antes de una petición con credenciales.</td></tr><tr><td class="k"><code>allowedHeaders</code></td><td class="val">*</td><td class="p"><b>Es lo más laxo de la configuración actual.</b> Acotarlo a <code>Authorization</code>, <code>Content-Type</code> e <code>Idempotency-Key</code> es una mejora pendiente.</td></tr><tr><td class="k"><code>allowCredentials</code></td><td class="val">true</td><td class="p">Necesario para que el navegador envíe la cookie HttpOnly de renovación. Es justamente lo que obliga a que los orígenes sean explícitos.</td></tr><tr><td class="k"><code>maxAge</code></td><td class="val">3600 segundos</td><td class="p">El navegador cachea la comprobación previa una hora, lo que evita una petición <code>OPTIONS</code> antes de cada llamada.</td></tr></table>
+ <div class="nota w"><b>Los dominios exactos permitidos hoy son <code>http://localhost:3000</code> y
+ <code>http://localhost:3500</code></b>, que son los de desarrollo. En staging y producción se
+ sustituyen por el dominio real mediante la variable de entorno
+ <code>AYNI_ORIGENES_PERMITIDOS</code>, sin tocar el código. <b>Lo que hay que mejorar:</b>
+ <code>allowedHeaders</code> está en <code>*</code> y debería acotarse a las tres cabeceras que se
+ usan de verdad.</div>
+
+ <h2>Trazabilidad: qué se registra y en qué formato</h2>
+ <p class="intro">Hoy existe la auditoría <b>de negocio</b> —la tabla
+ <code>identity.evento_auditoria</code>, con siete tipos de evento— pero los registros técnicos
+ son texto plano sin identificador de correlación. Este es el plan, y es el encargo de la próxima
+ semana.</p>
+ <table><tr><th>Campo</th><th>Valor</th><th>Por qué</th></tr><tr><td class="k"><code>Formato</code></td><td class="val">JSON estructurado (Logstash encoder para Logback)</td><td class="p">Un registro en texto plano hay que analizarlo con expresiones regulares para consultarlo. En JSON, Loki indexa los campos y se puede filtrar por cualquiera de ellos directamente.</td></tr><tr><td class="k"><code>correlationId</code></td><td class="val">UUID generado en el navegador, propagado en cabecera `X-Correlation-Id`</td><td class="p"><b>Es el campo que lo justifica todo.</b> Una sola petición del usuario atraviesa gateway, identity, RabbitMQ y core-banking. Sin un identificador común no se puede reconstruir qué pasó; con él, una sola consulta en Loki devuelve el recorrido completo.</td></tr><tr><td class="k"><code>usuarioId</code></td><td class="val">El `sub` del JWT</td><td class="p">Permite responder a «qué hizo este usuario» sin cruzar registros a mano.</td></tr><tr><td class="k"><code>servicio · version</code></td><td class="val">Nombre y versión desplegada</td><td class="p">Distingue de qué servicio y de qué despliegue viene cada línea.</td></tr><tr><td class="k"><code>nivel · timestamp</code></td><td class="val">Nivel y marca de tiempo con zona horaria</td><td class="p">Con zona horaria siempre: los servidores pueden estar en regiones distintas.</td></tr><tr><td class="k"><code>Lo que NUNCA se registra</code></td><td class="val">PAN, contraseñas, tokens, documento, biometría</td><td class="p">Es invariante del proyecto y se verifica en revisión de código. Un registro es el sitio donde los datos sensibles se filtran con más facilidad, porque nadie piensa en él como almacén.</td></tr></table>
+ <div class="nota"><b>Un ejemplo de por qué el correlation ID importa.</b> Cuando un usuario
+ completa su KYC, la petición atraviesa el gateway, <code>identity</code>, RabbitMQ y
+ <code>core-banking</code>. Si la cuenta no se abre, sin identificador común hay que buscar por
+ hora en cuatro sitios y cruzar a mano. Con él, <b>una sola consulta en Loki devuelve el recorrido
+ completo</b>, en orden y con el punto exacto donde se rompió.</div>
+
+ <h2>El endpoint más crítico y su límite de tasa</h2>
+ <div class="nota b"><b>El endpoint más crítico hoy es <code>POST /api/v1/sesion</code>.</b> No es
+ el que más tráfico recibe ni el que mueve dinero —ese aún no existe—, sino <b>la puerta de
+ entrada</b>: quien la fuerza obtiene todo lo demás. Es además el blanco natural de la fuerza bruta
+ y del <i>credential stuffing</i> con credenciales filtradas de otros sitios. Cuando exista
+ <code>POST /api/v1/transferencias</code> (HU-07), el título pasará a él.</div>
+ <p>Propuesta de límites, con la justificación de cada cifra:</p>
+ <table><tr><th>Endpoint</th><th>Límite propuesto</th><th>Prioridad</th><th>Por qué esa cifra</th>
+  </tr><tr><td class="rt"><code>/api/v1/sesion</code></td><td class="lim"><b>5 por minuto</b> por IP + correo</td><td><span class="oe bad">CRÍTICO</span></td><td class="p">Es la puerta de entrada y el blanco natural de fuerza bruta y credential stuffing. Cinco intentos por minuto no molestan a una persona —quien se equivoca al teclear lo hace dos o tres veces— y arruinan un ataque automatizado. Se combina con el bloqueo progresivo, que ya existe: el límite de tasa frena el volumen y el bloqueo protege la cuenta concreta.</td></tr><tr><td class="rt"><code>/api/v1/registro</code></td><td class="lim"><b>3 por minuto</b> por IP</td><td><span class="oe warn">ALTO</span></td><td class="p">Evita el alta masiva de cuentas falsas y el consumo de la cuota de OCR, que cuesta dinero.</td></tr><tr><td class="rt"><code>/api/v1/sesion/segundo-factor</code></td><td class="lim"><b>10 por minuto</b> por desafío</td><td><span class="oe warn">ALTO</span></td><td class="p">Un código TOTP son seis dígitos: un millón de combinaciones. Sin límite, en una ventana de dos minutos un atacante podría probar demasiadas.</td></tr><tr><td class="rt"><code>/api/v1/sesion/renovacion</code></td><td class="lim"><b>20 por minuto</b> por IP</td><td><span class="oe ok">MEDIO</span></td><td class="p">Uso legítimo alto —una renovación cada 15 minutos por sesión activa— pero acotado.</td></tr><tr><td class="rt"><code>/api/v1/solicitudes/*/documentos/url-de-subida</code></td><td class="lim"><b>10 por hora</b> por usuario</td><td><span class="oe ok">MEDIO</span></td><td class="p">Cada subida consume almacenamiento y cuota de OCR.</td></tr><tr><td class="rt"><code>/api/v1/transferencias</code></td><td class="lim"><b>10 por minuto</b> por usuario</td><td><span class="oe bad">CRÍTICO (futuro)</span></td><td class="p">Cuando exista, será el endpoint más crítico. El límite de tasa se suma a la idempotencia: una protege del abuso, la otra del duplicado accidental.</td></tr></table>
+ <div class="nota v2"><b>Cómo se implantaría.</b> Con el filtro <code>RequestRateLimiter</code> de
+ Spring Cloud Gateway respaldado por Redis, aplicado por ruta. Se usa Redis y no memoria del
+ proceso porque el contador tiene que ser <b>compartido</b>: con dos instancias del gateway y el
+ contador en memoria, el atacante dispondría del doble de intentos. La respuesta al superar el
+ límite es <code>429 Too Many Requests</code> con cabecera <code>Retry-After</code>.</div>
+ <div class="nota w"><b>El límite de tasa no sustituye al bloqueo progresivo, lo complementa.</b>
+ El límite frena el <b>volumen</b> desde un origen; el bloqueo protege <b>una cuenta concreta</b>
+ sin importar desde dónde venga el ataque. Un atacante que rote direcciones IP esquiva el primero
+ pero no el segundo.</div>
+</section>
+</main>
+
+<script>
+const PASOS = [{"n": 1, "t": "Credenciales", "r": "POST /api/v1/sesion", "d": "El usuario envía correo y contraseña. El servicio busca por <code>ux_usuario_correo</code>, verifica con <b>Argon2id</b> y consulta <code>control_de_acceso</code>.", "x": "Si la cuenta está bloqueada, responde igual que con credenciales malas: no se confirma que el correo exista.", "s": "identity"}, {"n": 2, "t": "Desafío", "r": "Respuesta 202 · desafío", "d": "Si las credenciales son correctas se emite un <b>desafío de segundo factor</b>: una fila en <code>desafio_segundo_factor</code> con vigencia de <b>2 minutos</b> y un solo uso.", "x": "Sin este paso la pantalla del código sería accesible directamente y bastaría conocer un correo para probar códigos.", "s": "identity"}, {"n": 3, "t": "Segundo factor", "r": "POST /api/v1/sesion/segundo-factor", "d": "El usuario teclea el código TOTP de 6 dígitos. El servicio descifra el secreto (<b>AES-256-GCM</b>), calcula el código de la ventana actual y compara.", "x": "El desafío se marca <code>consumido_en</code>: no se puede canjear dos veces.", "s": "identity"}, {"n": 4, "t": "Emisión", "r": "200 · token + cookie", "d": "Se emiten <b>dos</b> credenciales: el JWT de acceso (15 min, en el cuerpo) y el token de renovación (7 días, en cookie HttpOnly). Se registra <code>INGRESO_EXITOSO</code> en la auditoría.", "x": "El de renovación se guarda como huella SHA-256 con su <code>familia_id</code>.", "s": "identity"}, {"n": 5, "t": "Uso", "r": "Authorization: Bearer …", "d": "Cada petición lleva el JWT. El servicio valida firma y caducidad, lee el <code>sub</code> y <b>consulta los permisos en la base</b> antes de autorizar.", "x": "<b>APF2:</b> la validación está centralizada en el gateway (<code>AYNI-122</code>, ADR-0027). Ninguna ruta protegida llega a un servicio sin un token válido.", "s": "gateway"}, {"n": 6, "t": "Renovación", "r": "POST /api/v1/sesion/renovacion", "d": "Al caducar el acceso, el navegador envía la cookie. Se busca por huella, se marca <code>consumido_en</code> y se emite un par nuevo <b>de la misma familia</b>.", "x": "Si llega un token que ya tenía <code>consumido_en</code>, hay dos copias en circulación: <b>se invalida la familia entera</b>.", "s": "identity"}];
+const CLAIMS = [{"k": "iss", "v": "ayni-identity-service", "o": "Estándar", "d": "Quién emitió el token. Permite rechazar tokens de otro emisor si mañana hay varios."}, {"k": "sub", "v": "a3f7c2e1-4b8d-4f2a-9c1e-7d5b3a8f0e42", "o": "Estándar · UUID del usuario", "d": "<b>Es el dato que hace funcionar todo el sistema.</b> Con él, <code>core-banking</code> sabe de quién es la cuenta sin consultar a <code>identity</code>: <code>SELECT … WHERE usuario_id = &lt;sub&gt;</code>. Es un UUID y no un correlativo, así que no revela cuántos clientes hay ni permite enumerar."}, {"k": "estado", "v": "ACTIVO", "o": "Propio", "d": "Estado de la cuenta. Es <b>información de presentación</b>: permite a la interfaz mostrar un aviso sin una llamada extra. La decisión real de si se puede operar la toma el servicio consultando la base, nunca el token."}, {"k": "iat", "v": "1758391451", "o": "Estándar", "d": "Cuándo se emitió. Permite rechazar tokens emitidos antes de un cambio de contraseña."}, {"k": "exp", "v": "1758392351", "o": "Estándar", "d": "Cuándo caduca: <code>iat</code> + 15 minutos. Lo valida la propia biblioteca."}, {"k": "jti", "v": "5f2b1c8a-…", "o": "Estándar · identificador del token", "d": "Identificador único de <b>este</b> token. Permite revocarlo uno a uno sin invalidar la clave de firma entera, que echaría fuera a todos los usuarios a la vez."}];
+const ROLES = [{"c": "CLIENTE", "n": "Cliente", "d": "Opera únicamente sus propias cuentas.", "j": "Es el rol del usuario final. <b>Todo lo que hace está acotado a sus propios recursos</b>: la autorización no basta con «tiene el permiso», tiene que ser además «sobre un recurso suyo».", "col": "#0A5A96", "perms": [1, 3, 5, 6]}, {"c": "OPERADOR", "n": "Operador", "d": "Consulta clientes e inicia bloqueos. No aprueba por sí solo.", "j": "Puede <b>iniciar</b> acciones sensibles pero no completarlas. Es la mitad del principio de segregación de funciones.", "col": "#C59E41", "perms": [2, 7, 8]}, {"c": "SUPERVISOR", "n": "Supervisor", "d": "Aprueba lo iniciado por el operador.", "j": "La otra mitad: <b>aprueba pero no inicia</b>. Un mismo usuario no puede iniciar y aprobar la misma operación, que es el control clásico contra el fraude interno.", "col": "#0F7A52", "perms": [2, 7, 4, 9]}, {"c": "AUDITOR", "n": "Auditor", "d": "Lectura total, incluida la pista de auditoría. No escribe nada.", "j": "Acceso amplio de lectura y <b>cero escritura</b>. Es quien puede revisar sin poder alterar.", "col": "#6B4FA8", "perms": [2, 7, 12]}, {"c": "OFICIAL_CUMPLIMIENTO", "n": "Oficial de Cumplimiento", "d": "Revisa KYC y marca operaciones sospechosas. No mueve dinero.", "j": "Acceso al expediente de onboarding y a marcar operaciones, pero <b>ninguna capacidad monetaria</b>.", "col": "#B3261E", "perms": [7, 10, 11]}];
+
+/* Tema */
+const btema = document.getElementById("tema");
+btema.onclick = () => {
+  const o = document.body.dataset.t === "oscuro";
+  document.body.dataset.t = o ? "claro" : "oscuro";
+  btema.textContent = o ? "🌙 Oscuro" : "☀️ Claro";
+};
+
+/* Pestañas */
+function irA(v) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t.dataset.v === v));
+  document.querySelectorAll(".v").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (v === "pan") animarBarras();
+}
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => irA(t.dataset.v));
+document.querySelectorAll(".encargo").forEach(b => b.onclick = () => irA(b.dataset.ir));
+
+/* Barras de madurez */
+function animarBarras() {
+  document.querySelectorAll(".bf").forEach(b => {
+    b.style.width = "0";
+    requestAnimationFrame(() => setTimeout(() => b.style.width = b.dataset.v + "%", 60));
+  });
+}
+
+/* Flujo de autenticación */
+const pdet = document.getElementById("pdet");
+function verPaso(i) {
+  const p = PASOS[i];
+  document.querySelectorAll(".paso").forEach((b, j) => b.classList.toggle("on", j === i));
+  pdet.innerHTML = `<h4>Paso ${p.n} · ${p.t}</h4>` +
+    `<p style="margin:0"><code>${p.r}</code></p><p>${p.d}</p>` +
+    `<div class="why"><b>Detalle que importa.</b> ${p.x}</div>`;
+}
+document.querySelectorAll(".paso").forEach((b, i) => b.onclick = () => verPaso(i));
+verPaso(0);
+
+/* Claims del JWT */
+const cdet = document.getElementById("cdet");
+function verClaim(i) {
+  const c = CLAIMS[i];
+  document.querySelectorAll(".claim").forEach((b, j) => b.classList.toggle("on", j === i));
+  cdet.innerHTML = `<h4>${c.k}</h4><span class="org">${c.o} · no sensible</span>` +
+    `<p style="margin:0">${c.d}</p>`;
+}
+document.querySelectorAll(".claim").forEach((b, i) => b.onclick = () => verClaim(i));
+verClaim(1);
+
+/* RBAC */
+const rdet = document.getElementById("rdet");
+let rolSel = null;
+function verRol(cod) {
+  if (rolSel === cod) {
+    rolSel = null;
+    document.querySelectorAll(".rol").forEach(b => b.classList.remove("on"));
+    document.querySelectorAll(".matriz tbody tr").forEach(t => t.classList.remove("dim"));
+    document.querySelectorAll(".matriz td.mc").forEach(t => t.classList.remove("hi"));
+    document.querySelectorAll(".eps tbody tr").forEach(t => t.classList.remove("oculta"));
+    rdet.innerHTML = "Selecciona un rol para ver su alcance y los endpoints que le corresponden.";
+    return;
+  }
+  rolSel = cod;
+  const r = ROLES.find(x => x.c === cod);
+  document.querySelectorAll(".rol").forEach(b => b.classList.toggle("on", b.dataset.r === cod));
+  document.querySelectorAll(".matriz tbody tr").forEach(tr => {
+    const c = tr.querySelector(`td.mc[data-r="${cod}"]`);
+    tr.classList.toggle("dim", !c || !c.classList.contains("si"));
+  });
+  document.querySelectorAll(".matriz td.mc").forEach(td =>
+    td.classList.toggle("hi", td.dataset.r === cod));
+  document.querySelectorAll(".eps tbody tr").forEach(tr => {
+    const roles = (tr.dataset.roles || "").split(",");
+    tr.classList.toggle("oculta", !roles.includes(cod));
+  });
+  const n = r.perms.length;
+  rdet.innerHTML = `<b style="color:${r.col};font-family:Consolas,monospace">${r.c}</b> · ` +
+    `${r.d}<br><br>${r.j}<br><br><span style="color:var(--g7);font-size:11.5px">` +
+    `${n} permiso${n === 1 ? "" : "s"} · la matriz y la tabla de endpoints están filtradas. ` +
+    `Vuelve a pulsar el rol para quitar el filtro.</span>`;
+}
+document.querySelectorAll(".rol").forEach(b => b.onclick = () => verRol(b.dataset.r));
+document.querySelectorAll(".matriz th.rth").forEach(t => t.onclick = () => verRol(t.dataset.r));
+
+animarBarras();
+</script><a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>

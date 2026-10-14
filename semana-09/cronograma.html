@@ -1,0 +1,64 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><style>
+:root{--azul:#064475;--azul6:#0A5A96;--azul2:#BBD5EA;--azul05:#F2F7FB;
+      --gris3:#D3D8DE;--gris7:#4A5560;--gris9:#1F2933;--ambar:#C59E41;--rojo:#B3261E;--verde:#0F7A52}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Calibri,sans-serif;color:var(--gris9);background:#fff}
+.lienzo{width:1560px;padding:32px 78px 34px 38px}
+h1{font-size:24px;color:var(--azul)}
+.sub{font-size:13px;color:var(--gris7);margin-top:5px;max-width:1180px;line-height:1.5}
+.grafico{margin-top:22px;border:1.5px solid var(--gris3);border-radius:10px}
+.cabecera{border-radius:8px 8px 0 0;overflow:hidden}
+.cabecera{display:flex;background:var(--azul);color:#fff}
+.cabecera .etq{flex:0 0 330px;padding:9px 12px;font-size:12px;font-weight:700;border-right:1px solid rgba(255,255,255,.25)}
+.cabecera .pista{flex:1;position:relative;height:34px}
+.mes{position:absolute;top:0;height:34px;line-height:34px;font-size:11.5px;font-weight:600;
+     text-align:center;border-left:1px solid rgba(255,255,255,.25)}
+.hitos{display:flex;border-bottom:1px solid var(--gris3);background:var(--azul05)}
+.hitos .etq{flex:0 0 330px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--azul);border-right:1px solid var(--gris3)}
+.hitos .pista{flex:1;position:relative;height:74px}
+.hito{position:absolute;top:5px;transform:translateX(-50%);text-align:center;width:104px}
+.hito.alt{top:40px}
+.hito i{display:block;width:11px;height:11px;margin:0 auto 3px;transform:rotate(45deg);
+        background:var(--azul6);border:1.5px solid #fff;box-shadow:0 0 0 1.5px var(--azul6)}
+.hito b{font-size:9.5px;font-weight:600;color:var(--gris7);display:block;line-height:1.15}
+.hito.ok i{background:var(--verde);box-shadow:0 0 0 1.5px var(--verde)}
+.hito.ok b{color:var(--verde)}
+.hito.prox i{background:var(--ambar);box-shadow:0 0 0 1.5px var(--ambar)}
+.hito.prox b{color:var(--ambar);font-weight:700}
+.fila{display:flex;border-bottom:1px solid var(--gris3);min-height:50px}
+.fila:last-child{border-bottom:0}
+.fila:nth-child(even){background:var(--azul05)}
+.etq{flex:0 0 330px;padding:9px 12px;font-size:12px;font-weight:600;color:var(--azul);
+     border-right:1px solid var(--gris3);display:flex;flex-direction:column;justify-content:center}
+.etq small{font-weight:400;color:var(--gris7);font-size:10px;margin-top:2px;line-height:1.25}
+.pista{flex:1;position:relative}
+.base{position:absolute;top:12px;height:11px;border:1.5px dashed var(--azul6);border-radius:3px;background:transparent}
+.real{position:absolute;top:26px;height:12px;border-radius:3px;background:var(--azul6)}
+.real.desv{background:var(--ambar)}
+.hoy{position:absolute;top:0;bottom:0;width:2px;background:var(--rojo);z-index:5}
+.hoy b{position:absolute;top:-1px;left:4px;font-size:10px;font-weight:700;color:var(--rojo);white-space:nowrap}
+.leyenda{display:flex;gap:28px;margin-top:14px;font-size:11.5px;color:var(--gris7);align-items:center;flex-wrap:wrap}
+.leyenda span{display:flex;align-items:center;gap:7px}
+.k-base{width:26px;height:10px;border:1.5px dashed var(--azul6);border-radius:3px}
+.k-real{width:26px;height:11px;border-radius:3px;background:var(--azul6)}
+.k-desv{width:26px;height:11px;border-radius:3px;background:var(--ambar)}
+.k-hoy{width:2px;height:14px;background:var(--rojo)}
+.k-ok{width:10px;height:10px;transform:rotate(45deg);background:var(--verde)}
+</style></head><body><div class="lienzo" id="gantt">
+<h1>Cronograma del proyecto · línea base contra ejecución real</h1>
+<p class="sub">La barra de trazo discontinuo es la <b>línea base</b> aprobada en el Acta de Constitución.
+La barra maciza es la <b>ejecución real</b>. En ámbar, los sprints cuyo alcance no se cerró dentro de su
+propia ventana. Los sprints aún no iniciados solo muestran línea base.</p>
+<div class="grafico">
+  <div class="cabecera"><div class="etq">Bloque de trabajo</div><div class="pista"><span class="mes" style="left:0.000%;width:14.754%">Agosto</span><span class="mes" style="left:14.754%;width:24.590%">Septiembre</span><span class="mes" style="left:39.344%;width:25.410%">Octubre</span><span class="mes" style="left:64.754%;width:24.590%">Noviembre</span><span class="mes" style="left:89.344%;width:10.656%">Diciembre</span></div></div>
+  <div class="hitos"><div class="etq">HITOS</div><div class="pista"><span class="hito ok" style="left:2.459%"><i></i><b>Acta</b></span><span class="hito ok alt" style="left:7.377%"><i></i><b>Línea base</b></span><span class="hito ok" style="left:18.852%"><i></i><b>Integración validada</b></span><span class="hito ok alt" style="left:22.951%"><i></i><b>APF1</b></span><span class="hito ok" style="left:40.164%"><i></i><b>Producción v1 (AWS)</b></span><span class="hito prox alt" style="left:42.623%"><i></i><b>APF2</b></span><span class="hito fut" style="left:64.754%"><i></i><b>Producción v2</b></span><span class="hito fut alt" style="left:68.852%"><i></i><b>APF3</b></span><span class="hito fut" style="left:99.180%"><i></i><b>Release 1.0.0</b></span><span class="hoy" style="left:40.984%"></span></div></div>
+  <div class="fila"><div class="etq">Sprint 0 · Fundación<small>3 ítems (19 pts) se cerraron ya dentro del Sprint 1</small></div><div class="pista"><span class="base" style="left:2.459%;width:5.738%"></span><span class="real desv" style="left:2.459%;width:16.393%"></span></div></div><div class="fila"><div class="etq">Sprint 1 · Esqueleto Ambulante<small>Meta alcanzada. HU-20 (13 pts) desplazada al Sprint 2</small></div><div class="pista"><span class="base" style="left:8.197%;width:11.475%"></span><span class="real desv" style="left:8.197%;width:10.656%"></span></div></div><div class="fila"><div class="etq">Sprint 2 · Onboarding KYC<small>Cerrado con KYC completo (DNI por OCR y selfie); +6 días por el sobrecompromiso</small></div><div class="pista"><span class="base" style="left:19.672%;width:11.475%"></span><span class="real desv" style="left:19.672%;width:16.393%"></span></div></div><div class="fila"><div class="etq">Sprint 3 · Núcleo Transaccional<small>Adelantado: transferencias HU-07/08 y producción en AWS listas antes del APF2</small></div><div class="pista"><span class="base" style="left:31.148%;width:11.475%"></span><span class="real" style="left:36.066%;width:4.918%"></span></div></div><div class="fila"><div class="etq">Sprint 4 · Transferencias</div><div class="pista"><span class="base" style="left:42.623%;width:11.475%"></span></div></div><div class="fila"><div class="etq">Sprint 5 · Tarjeta de débito</div><div class="pista"><span class="base" style="left:54.098%;width:11.475%"></span></div></div><div class="fila"><div class="etq">Sprint 6 · Interoperabilidad</div><div class="pista"><span class="base" style="left:65.574%;width:11.475%"></span></div></div><div class="fila"><div class="etq">Sprint 7 · Experiencia<small>Holgura y calidad</small></div><div class="pista"><span class="base" style="left:77.049%;width:11.475%"></span></div></div><div class="fila"><div class="etq">Sprint 8 · Endurecimiento<small>Holgura y cierre</small></div><div class="pista"><span class="base" style="left:88.525%;width:11.475%"></span></div></div>
+</div>
+<div class="leyenda">
+  <span><i class="k-base"></i>Línea base planificada</span>
+  <span><i class="k-real"></i>Ejecución real conforme a lo previsto</span>
+  <span><i class="k-desv"></i>Ejecución con desviación de alcance</span>
+  <span><i class="k-ok"></i>Hito cumplido</span>
+  <span><i class="k-hoy"></i>Hoy · 3 de octubre de 2026</span>
+</div>
+</div><a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>

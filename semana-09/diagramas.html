@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Ayni Bank · Diagramas APF2</title>
+<style>
+body{margin:0;background:#fff;font-family:Segoe UI,Arial,sans-serif;color:#1f2933}
+.d{width:1100px;padding:24px;box-sizing:border-box}
+h2{margin:0 0 12px;color:#0b2a4a;font-size:20px}
+text{font-family:Segoe UI,Arial,sans-serif}
+.t{font-size:14px;font-weight:700;fill:#0b2a4a}.s{font-size:12px;fill:#4a5a6a}.w{font-size:13px;font-weight:700;fill:#fff}
+.mono{font-family:Consolas,monospace;font-size:12px}
+</style></head><body>
+
+<section class="d" id="replicacion"><h2>Arquitectura de datos: hoy y replicación propuesta</h2>
+<svg width="1052" height="440" viewBox="0 0 1052 440">
+ <defs><marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#064475"/></marker>
+ <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#C59E41"/></marker></defs>
+ <rect x="10" y="10" width="1032" height="420" rx="14" fill="#f4f7fb" stroke="#dbe3ec"/>
+ <text x="30" y="40" class="t">Región us-east-1 (AWS)</text>
+ <rect x="30" y="60" width="480" height="350" rx="12" fill="#fff" stroke="#064475" stroke-dasharray="6 4"/>
+ <text x="48" y="86" class="t">Zona A · implantado hoy</text>
+ <rect x="60" y="110" width="190" height="80" rx="10" fill="#064475"/><text x="155" y="143" class="w" text-anchor="middle">EC2 · servicios</text><text x="155" y="165" class="w" text-anchor="middle" style="font-weight:400;font-size:12px">identity · core · notification</text>
+ <rect x="290" y="110" width="200" height="80" rx="10" fill="#1e7d4f"/><text x="390" y="143" class="w" text-anchor="middle">RDS PostgreSQL 17</text><text x="390" y="165" class="w" text-anchor="middle" style="font-weight:400;font-size:12px">primaria · cifrada (KMS)</text>
+ <line x1="250" y1="150" x2="288" y2="150" stroke="#064475" stroke-width="2.5" marker-end="url(#f)"/><text x="269" y="140" class="s" text-anchor="middle">TLS</text>
+ <rect x="290" y="240" width="200" height="70" rx="10" fill="#fff" stroke="#1e7d4f" stroke-width="2"/><text x="390" y="270" class="t" text-anchor="middle">Copias automáticas</text><text x="390" y="290" class="s" text-anchor="middle">diarias + PITR (punto en el tiempo)</text>
+ <line x1="390" y1="190" x2="390" y2="238" stroke="#1e7d4f" stroke-width="2" marker-end="url(#f)"/>
+ <text x="60" y="350" class="s">• Migraciones Flyway versionadas en cada despliegue</text>
+ <text x="60" y="372" class="s">• Usuario ayni_app sin superusuario · maestra en Secrets Manager</text>
+ <text x="60" y="394" class="s">• Alarmas CloudWatch: CPU, almacenamiento, conexiones</text>
+ <rect x="540" y="60" width="480" height="350" rx="12" fill="#fff" stroke="#C59E41" stroke-dasharray="6 4"/>
+ <text x="558" y="86" class="t">Propuesta para producción real</text>
+ <rect x="570" y="110" width="190" height="80" rx="10" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="665" y="143" class="t" text-anchor="middle">Standby Multi-AZ</text><text x="665" y="165" class="s" text-anchor="middle">zona B · réplica SÍNCRONA</text>
+ <rect x="800" y="110" width="200" height="80" rx="10" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="900" y="143" class="t" text-anchor="middle">Réplica de lectura</text><text x="900" y="165" class="s" text-anchor="middle">ASÍNCRONA · panel e historial</text>
+ <rect x="685" y="240" width="200" height="70" rx="10" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="785" y="270" class="t" text-anchor="middle">Snapshots en otra región</text><text x="785" y="290" class="s" text-anchor="middle">recuperación ante desastre</text>
+ <path d="M490,128 C520,100 545,110 568,128" fill="none" stroke="#C59E41" stroke-width="2.5" marker-end="url(#g)"/>
+ <path d="M490,170 C620,215 760,215 900,192" fill="none" stroke="#C59E41" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#g)"/>
+ <line x1="490" y1="275" x2="683" y2="275" stroke="#C59E41" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#g)"/>
+ <text x="570" y="350" class="s">• Failover automático en 60–120 s, RPO = 0 (síncrona)</text>
+ <text x="570" y="372" class="s">• Lecturas desviadas: la primaria solo escribe asientos</text>
+ <text x="570" y="394" class="s">• Coste: se activa al salir del plan gratuito</text>
+</svg></section>
+
+<section class="d" id="repository"><h2>Patrón Repository sobre puertos y adaptadores · core-banking</h2>
+<svg width="1052" height="430" viewBox="0 0 1052 430">
+ <defs><marker id="h" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0L12,6L0,12z" fill="#fff" stroke="#064475"/></marker>
+ <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10" fill="none" stroke="#4a5a6a"/></marker></defs>
+ <rect x="10" y="10" width="330" height="410" rx="12" fill="#eef4fb" stroke="#064475"/><text x="26" y="36" class="t">Aplicación</text>
+ <rect x="360" y="10" width="330" height="410" rx="12" fill="#f3f9f4" stroke="#1e7d4f"/><text x="376" y="36" class="t">Dominio (sin framework)</text>
+ <rect x="710" y="10" width="332" height="410" rx="12" fill="#fff8e7" stroke="#C59E41"/><text x="726" y="36" class="t">Infraestructura (Spring Data JPA)</text>
+ <g><rect x="30" y="60" width="290" height="110" rx="6" fill="#fff" stroke="#064475"/><rect x="30" y="60" width="290" height="28" rx="6" fill="#064475"/><text x="175" y="79" class="w" text-anchor="middle">OperarCuentaService</text>
+ <text x="42" y="108" class="mono">+ transferir(usuario, destino, importe, clave)</text><text x="42" y="128" class="mono">+ depositarSimulado(usuario, importe, clave)</text><text x="42" y="152" class="s">@Transactional · usa solo puertos</text></g>
+ <g><rect x="380" y="60" width="290" height="130" rx="6" fill="#fff" stroke="#1e7d4f"/><rect x="380" y="60" width="290" height="28" rx="6" fill="#1e7d4f"/><text x="525" y="79" class="w" text-anchor="middle">«interface» LibroMayorPort</text>
+ <text x="392" y="108" class="mono">+ buscarPorNumero(numero)</text><text x="392" y="126" class="mono">+ bloquear(cuentaIds)</text><text x="392" y="144" class="mono">+ saldoDe(cuentaId, moneda)</text><text x="392" y="162" class="mono">+ registrar(movimiento)</text></g>
+ <g><rect x="380" y="220" width="290" height="70" rx="6" fill="#fff" stroke="#1e7d4f"/><rect x="380" y="220" width="290" height="28" rx="6" fill="#1e7d4f"/><text x="525" y="239" class="w" text-anchor="middle">«interface» PistaDeAuditoriaPort</text><text x="392" y="270" class="mono">+ registrar(...) · registrarRechazo(...)</text></g>
+ <g><rect x="380" y="320" width="290" height="80" rx="6" fill="#fff" stroke="#1e7d4f"/><rect x="380" y="320" width="290" height="28" rx="6" fill="#1e7d4f"/><text x="525" y="339" class="w" text-anchor="middle">Movimiento · Asiento · Dinero</text><text x="392" y="370" class="s">reglas: cargo + abono = 0, BigDecimal</text><text x="392" y="388" class="s">HALF_EVEN, límites de importe</text></g>
+ <g><rect x="730" y="60" width="292" height="110" rx="6" fill="#fff" stroke="#C59E41"/><rect x="730" y="60" width="292" height="28" rx="6" fill="#C59E41"/><text x="876" y="79" class="w" text-anchor="middle">AdaptadorLibroMayor</text>
+ <text x="742" y="108" class="s">@Repository · traduce fila ↔ dominio</text><text x="742" y="128" class="mono">SELECT ... FOR UPDATE ordenado</text><text x="742" y="148" class="mono">SUM(asientos) en JPQL</text></g>
+ <g><rect x="730" y="220" width="292" height="70" rx="6" fill="#fff" stroke="#C59E41"/><rect x="730" y="220" width="292" height="28" rx="6" fill="#C59E41"/><text x="876" y="239" class="w" text-anchor="middle">AdaptadorPistaDeAuditoria</text><text x="742" y="270" class="s">rechazos en transacción REQUIRES_NEW</text></g>
+ <g><rect x="730" y="320" width="292" height="80" rx="6" fill="#fff" stroke="#C59E41"/><rect x="730" y="320" width="292" height="28" rx="6" fill="#C59E41"/><text x="876" y="339" class="w" text-anchor="middle">CuentaJpaRepository · AsientoJpaRepository</text><text x="742" y="370" class="s">interfaces Spring Data → PostgreSQL (RDS)</text><text x="742" y="388" class="s">consultas siempre parametrizadas</text></g>
+ <line x1="320" y1="115" x2="378" y2="115" stroke="#4a5a6a" stroke-width="2" marker-end="url(#a)"/><text x="349" y="106" class="s" text-anchor="middle">usa</text>
+ <path d="M320,150 C350,180 350,250 378,255" fill="none" stroke="#4a5a6a" stroke-width="2" marker-end="url(#a)"/>
+ <line x1="730" y1="115" x2="672" y2="115" stroke="#064475" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#h)"/><text x="701" y="106" class="s" text-anchor="middle">implementa</text>
+ <line x1="730" y1="255" x2="672" y2="255" stroke="#064475" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#h)"/>
+ <line x1="876" y1="170" x2="876" y2="318" stroke="#4a5a6a" stroke-width="2" marker-end="url(#a)"/>
+</svg></section>
+
+<section class="d" id="aws"><h2>Arquitectura de despliegue en AWS (us-east-1)</h2>
+<svg width="1052" height="520" viewBox="0 0 1052 520">
+ <defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#064475"/></marker></defs>
+ <rect x="10" y="40" width="200" height="90" rx="10" fill="#24292f"/><text x="110" y="75" class="w" text-anchor="middle">GitHub Actions</text><text x="110" y="97" class="w" text-anchor="middle" style="font-weight:400;font-size:12px">CI · CD · seguridad</text>
+ <rect x="10" y="380" width="200" height="80" rx="10" fill="#fff" stroke="#064475" stroke-width="2"/><text x="110" y="413" class="t" text-anchor="middle">Usuario</text><text x="110" y="435" class="s" text-anchor="middle">navegador · HTTPS</text>
+ <rect x="250" y="10" width="790" height="500" rx="14" fill="#f4f7fb" stroke="#dbe3ec"/><text x="268" y="34" class="t">Cuenta AWS · plan gratuito · CloudFormation</text>
+ <rect x="270" y="50" width="160" height="56" rx="8" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="350" y="75" class="t" text-anchor="middle">IAM + OIDC</text><text x="350" y="94" class="s" text-anchor="middle">sin claves en GitHub</text>
+ <rect x="450" y="50" width="160" height="56" rx="8" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="530" y="75" class="t" text-anchor="middle">ECR</text><text x="530" y="94" class="s" text-anchor="middle">imágenes escaneadas</text>
+ <rect x="630" y="50" width="190" height="56" rx="8" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="725" y="75" class="t" text-anchor="middle">Systems Manager</text><text x="725" y="94" class="s" text-anchor="middle">despliegue sin SSH · secretos</text>
+ <rect x="840" y="50" width="180" height="56" rx="8" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="930" y="75" class="t" text-anchor="middle">SES · SNS</text><text x="930" y="94" class="s" text-anchor="middle">correos y alertas</text>
+ <rect x="270" y="130" width="560" height="360" rx="12" fill="#fff" stroke="#064475" stroke-width="2"/><text x="288" y="156" class="t">EC2 m7i-flex.large · Docker Compose</text>
+ <rect x="290" y="175" width="520" height="44" rx="8" fill="#064475"/><text x="550" y="202" class="w" text-anchor="middle">Caddy · TLS Let's Encrypt · HSTS · CSP · solo puertos 80/443</text>
+ <rect x="290" y="235" width="160" height="44" rx="8" fill="#e8eef5"/><text x="370" y="262" class="t" text-anchor="middle">ayni-web (Next.js)</text>
+ <rect x="470" y="235" width="160" height="44" rx="8" fill="#e8eef5"/><text x="550" y="262" class="t" text-anchor="middle">gateway (JWT)</text>
+ <rect x="650" y="235" width="160" height="44" rx="8" fill="#e8eef5"/><text x="730" y="262" class="t" text-anchor="middle">Grafana /grafana</text>
+ <rect x="290" y="295" width="120" height="44" rx="8" fill="#e8eef5"/><text x="350" y="322" class="t" text-anchor="middle">identity</text>
+ <rect x="420" y="295" width="120" height="44" rx="8" fill="#e8eef5"/><text x="480" y="322" class="t" text-anchor="middle">core-banking</text>
+ <rect x="550" y="295" width="120" height="44" rx="8" fill="#e8eef5"/><text x="610" y="322" class="t" text-anchor="middle">kyc (OCR)</text>
+ <rect x="680" y="295" width="130" height="44" rx="8" fill="#e8eef5"/><text x="745" y="322" class="t" text-anchor="middle">notification</text>
+ <rect x="290" y="355" width="160" height="44" rx="8" fill="#f3f9f4"/><text x="370" y="382" class="t" text-anchor="middle">RabbitMQ</text>
+ <rect x="470" y="355" width="160" height="44" rx="8" fill="#f3f9f4"/><text x="550" y="382" class="t" text-anchor="middle">Prometheus</text>
+ <rect x="650" y="355" width="160" height="44" rx="8" fill="#f3f9f4"/><text x="730" y="382" class="t" text-anchor="middle">node-exporter</text>
+ <text x="290" y="430" class="s">desplegar.sh: descarga la configuración del commit, arranca, verifica salud</text>
+ <text x="290" y="450" class="s">y revierte si algo no queda sano. Pruebas de humo después de cada despliegue.</text>
+ <rect x="860" y="150" width="160" height="80" rx="10" fill="#1e7d4f"/><text x="940" y="183" class="w" text-anchor="middle">RDS PostgreSQL</text><text x="940" y="205" class="w" text-anchor="middle" style="font-weight:400;font-size:12px">privada · TLS · PITR</text>
+ <rect x="860" y="260" width="160" height="70" rx="10" fill="#1e7d4f"/><text x="940" y="290" class="w" text-anchor="middle">S3 (KMS)</text><text x="940" y="310" class="w" text-anchor="middle" style="font-weight:400;font-size:12px">DNI y selfies</text>
+ <rect x="860" y="360" width="160" height="70" rx="10" fill="#fff" stroke="#C59E41" stroke-width="2"/><text x="940" y="390" class="t" text-anchor="middle">CloudWatch</text><text x="940" y="410" class="s" text-anchor="middle">alarmas · Budgets</text>
+ <line x1="210" y1="85" x2="268" y2="80" stroke="#064475" stroke-width="2" marker-end="url(#k)"/>
+ <line x1="210" y1="420" x2="288" y2="200" stroke="#064475" stroke-width="2.5" marker-end="url(#k)"/>
+ <line x1="830" y1="190" x2="858" y2="190" stroke="#064475" stroke-width="2" marker-end="url(#k)"/>
+ <line x1="830" y1="295" x2="858" y2="295" stroke="#064475" stroke-width="2" marker-end="url(#k)"/>
+ <line x1="725" y1="106" x2="725" y2="128" stroke="#064475" stroke-width="2" marker-end="url(#k)"/>
+</svg></section>
+<a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>

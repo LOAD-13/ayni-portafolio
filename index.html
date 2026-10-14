@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bitácora Ayni Bank</title>
+<meta name="description" content="Los entregables interactivos del Curso Integrador II: Software, semana a semana.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--noche:#061a2e;--noche2:#0b2540;--tinta:#f4efe4;--tinta2:#b9c3cf;--tinta3:#7f8d9c;--oro:#c59e41;--oro2:#e6c77a;
+ --linea:rgba(244,239,228,.12);--carta:rgba(14,40,66,.72);--carta2:rgba(20,52,84,.9);--azul:#5aa0e6}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--noche)}
+body{font:16px/1.6 Figtree,system-ui,sans-serif;color:var(--tinta);background:var(--noche);overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--oro);color:var(--noche)}
+/* Grano */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.06;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* Navegación */
+nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:28px;padding:18px clamp(16px,4vw,48px);
+ transition:background .3s,backdrop-filter .3s}
+nav.solida{background:rgba(6,26,46,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--linea)}
+.marca{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:.02em}
+.marca svg{width:26px;height:26px}
+.marca em{font:italic 400 22px/1 "Instrument Serif",serif;color:var(--oro2);letter-spacing:0}
+nav .enl{margin-left:auto;display:flex;gap:22px;font-size:14px}
+nav .enl a{text-decoration:none;color:var(--tinta2);position:relative}
+nav .enl a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--oro);transition:right .3s}
+nav .enl a:hover{color:var(--tinta)} nav .enl a:hover::after{right:0}
+/* Hero */
+.hero{position:relative;min-height:100svh;display:grid;align-items:end;padding:0 clamp(16px,6vw,96px) clamp(48px,10vh,110px);overflow:hidden}
+#tejido{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:radial-gradient(120% 80% at 20% 100%,rgba(6,26,46,.95) 0%,rgba(6,26,46,.55) 45%,rgba(6,26,46,0) 75%),
+ linear-gradient(180deg,rgba(6,26,46,.6) 0%,rgba(6,26,46,0) 30%)}
+.hero .txt{position:relative;z-index:2;max-width:980px}
+.kicker{font:600 12px/1 "JetBrains Mono",monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--oro2);display:flex;align-items:center;gap:12px}
+.kicker::before{content:"";width:36px;height:1px;background:var(--oro)}
+h1{font:400 clamp(44px,8.4vw,118px)/.95 "Instrument Serif",serif;letter-spacing:-.015em;margin:22px 0 22px}
+h1 em{color:var(--oro2)}
+.hero p.lead{font-size:clamp(16px,1.6vw,20px);color:var(--tinta2);max-width:620px}
+.cifras{display:flex;gap:clamp(20px,4vw,56px);margin-top:38px;flex-wrap:wrap}
+.cifras div{border-left:1px solid var(--oro);padding-left:14px}
+.cifras b{display:block;font:400 40px/1 "Instrument Serif",serif;color:var(--tinta)}
+.cifras span{font-size:12.5px;color:var(--tinta3);letter-spacing:.04em}
+.bajar{position:absolute;right:clamp(16px,6vw,96px);bottom:clamp(48px,10vh,110px);z-index:2;font:600 11px/1 "JetBrains Mono",monospace;
+ letter-spacing:.2em;color:var(--tinta3);writing-mode:vertical-rl;text-decoration:none;display:flex;align-items:center;gap:12px}
+.bajar::after{content:"";width:1px;height:60px;background:linear-gradient(var(--oro),transparent);animation:gota 2.2s infinite}
+@keyframes gota{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* Entrada */
+.entra{opacity:0;transform:translateY(18px);animation:entra .9s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes entra{to{opacity:1;transform:none}}
+/* Secciones */
+section.semanas{position:relative;padding:110px clamp(16px,6vw,96px) 60px;background:linear-gradient(180deg,var(--noche) 0%,#081f36 100%)}
+.cab{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:end;justify-content:space-between;margin-bottom:56px}
+h2{font:400 clamp(34px,4.6vw,60px)/1 "Instrument Serif",serif}
+h2 em{color:var(--oro2)}
+.filtros{display:flex;gap:8px;flex-wrap:wrap}
+.filtros button{font:500 13px/1 Figtree,sans-serif;color:var(--tinta2);background:transparent;border:1px solid var(--linea);border-radius:999px;padding:9px 16px;cursor:pointer;transition:all .2s}
+.filtros button:hover{border-color:var(--oro);color:var(--tinta)}
+.filtros button[aria-pressed="true"]{background:var(--oro);border-color:var(--oro);color:var(--noche);font-weight:700}
+.semana{display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:24px clamp(24px,4vw,64px);padding:38px 0;border-top:1px solid var(--linea)}
+.semana[hidden]{display:none}
+.rotulo{position:sticky;top:96px;align-self:start}
+.rotulo .num{font:400 clamp(64px,7vw,104px)/.85 "Instrument Serif",serif;color:transparent;-webkit-text-stroke:1px var(--oro);display:block}
+.rotulo .mes{font:600 11px/1.4 "JetBrains Mono",monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta3);display:block;margin-top:10px}
+.rotulo .tema{font-size:15px;color:var(--tinta);margin-top:6px;display:block;max-width:220px}
+.fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
+.ficha{position:relative;display:flex;flex-direction:column;gap:12px;padding:22px 22px 18px;border-radius:16px;text-decoration:none;
+ background:var(--carta);border:1px solid var(--linea);transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,background .3s;
+ opacity:0;transform:translateY(22px)}
+.ficha.vista{opacity:1;transform:none;transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.2,.7,.2,1) var(--d,0s),border-color .3s,background .3s}
+.ficha:hover,.ficha:focus-visible{border-color:rgba(197,158,65,.7);background:var(--carta2);transform:translateY(-4px);outline:none}
+.ficha .tipo{align-self:flex-start;font:600 10.5px/1 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;padding:6px 10px;border-radius:999px;border:1px solid}
+.tipo.Entregable{color:var(--oro2);border-color:rgba(230,199,122,.45)}
+.tipo.APF{color:#8fd3b6;border-color:rgba(143,211,182,.4)}
+.tipo.Evidencia{color:#9cc5f0;border-color:rgba(156,197,240,.4)}
+.tipo.Prototipo{color:#f0a9c4;border-color:rgba(240,169,196,.4)}
+.ficha h3{font:400 26px/1.1 "Instrument Serif",serif;color:var(--tinta)}
+.ficha p{font-size:14px;color:var(--tinta2);line-height:1.55}
+.ficha .vivo{font-size:13px;color:var(--tinta3);padding-left:12px;border-left:2px solid var(--oro)}
+.ficha .pie{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--linea);font-size:13px}
+.ficha .pie span{color:var(--tinta3);font-family:"JetBrains Mono",monospace;font-size:11.5px}
+.ficha .pie b{color:var(--oro2);font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.ficha .pie b i{font-style:normal;transition:transform .3s}
+.ficha:hover .pie b i{transform:translateX(5px)}
+/* En vivo */
+.envivo{padding:40px clamp(16px,6vw,96px) 100px;background:#081f36}
+.banda{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;padding:40px clamp(20px,4vw,56px);border-radius:24px;
+ background:radial-gradient(120% 140% at 100% 0%,rgba(197,158,65,.22),transparent 55%),linear-gradient(135deg,#0d2c4b,#0a223b);border:1px solid rgba(197,158,65,.35)}
+.banda p{color:var(--tinta2);margin-top:12px;max-width:560px}
+.botones{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 20px;border-radius:999px;font-weight:600;text-decoration:none;font-size:15px;transition:transform .2s,background .2s}
+.btn.oro{background:var(--oro);color:var(--noche)} .btn.oro:hover{background:var(--oro2);transform:translateY(-2px)}
+.btn.lin{border:1px solid var(--linea);color:var(--tinta)} .btn.lin:hover{border-color:var(--oro);transform:translateY(-2px)}
+footer{padding:48px clamp(16px,6vw,96px);border-top:1px solid var(--linea);display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;color:var(--tinta3);font-size:13.5px;background:#071c31}
+footer b{color:var(--tinta);font-weight:600}
+@media (max-width:760px){
+ nav .enl{display:none} .semana{grid-template-columns:1fr} .rotulo{position:static;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+ .rotulo .tema{max-width:none} .banda{grid-template-columns:1fr} .botones{justify-content:flex-start} .bajar{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.entra,.ficha{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<nav id="nav">
+ <a class="marca" href="#inicio" aria-label="Inicio">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="none" stroke="#c59e41" stroke-width="1.6"/>
+   <path d="M9 22 L16 9 L23 22 M12 17h8" fill="none" stroke="#f4efe4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  Ayni Bank <em>bitácora</em></a>
+ <div class="enl"><a href="#semanas">Semanas</a><a href="#vivo">En vivo</a><a href="https://github.com/LOAD-13/ayni-bank" target="_blank" rel="noopener">Repositorio</a></div>
+</nav>
+
+<header class="hero" id="inicio">
+ <canvas id="tejido" aria-hidden="true"></canvas>
+ <div class="txt">
+  <div class="kicker entra" style="animation-delay:.1s">Curso Integrador II · Software · UTP 2026-II</div>
+  <h1 class="entra" style="animation-delay:.25s">Un banco tejido<br><em>semana a semana.</em></h1>
+  <p class="lead entra" style="animation-delay:.45s">Ayni es la reciprocidad andina: hoy por ti, mañana por mí. Aquí están los entregables interactivos que fuimos construyendo para el curso, del primer prototipo a la calidad funcional.</p>
+  <div class="cifras entra" style="animation-delay:.65s" id="cifras"></div>
+ </div>
+ <a class="bajar" href="#semanas">Recorrer</a>
+</header>
+
+<section class="semanas" id="semanas">
+ <div class="cab">
+  <div><div class="kicker">Índice</div><h2 style="margin-top:14px">Semana por <em>semana</em></h2></div>
+  <div class="filtros" id="filtros" role="group" aria-label="Filtrar por tipo"></div>
+ </div>
+ <div id="lista"></div>
+</section>
+
+<section class="envivo" id="vivo">
+ <div class="banda">
+  <div><div class="kicker">En vivo</div><h2 style="margin-top:14px">Cómo <em>avanza</em> el equipo</h2>
+   <p>El tablero de avance lee Jira cada mañana: story points por integrante, burnup, burndown por sprint y el histórico día a día.</p></div>
+  <div class="botones"><a class="btn oro" href="https://load-13.github.io/ayni-tablero/" target="_blank" rel="noopener">Abrir el tablero <span aria-hidden="true">→</span></a>
+   <a class="btn lin" href="https://github.com/LOAD-13/ayni-bank" target="_blank" rel="noopener">Código fuente</a></div>
+ </div>
+</section>
+
+<footer>
+ <div><b>Ayni Bank</b> · banca 100 % digital para personas en el Perú<br>Docente y Product Owner: Dr. Carlos R. P. Tovar</div>
+ <div>Joaquín Loa Denegri (Scrum Master) · Kiara Santti Saavedra · Gerardo Socualaya Mandamiento<br>Eduardo Vargas Zumaeta · Frank Sotomayor Suasnabar · Fabián García Champi</div>
+</footer>
+
+<script>
+const SEMANAS=[{"semana": "02", "mes": "agosto", "tema": "Diseño UX/UI", "fichas": [{"tipo": "Prototipo", "titulo": "Prototipo navegable de Ayni", "ruta": "semana-02/prototipo/index.html", "desc": "Las pantallas diseñadas en pen.dev convertidas en un recorrido clicable: landing, registro, captura del DNI, selfie, inicio de sesión, panel y guía de diseño.", "vivo": "Navegar el flujo completo de alta como lo haría un cliente.", "peso": "23.8 MB"}]}, {"semana": "05", "mes": "septiembre", "tema": "APF1 · Optimización del rendimiento web", "fichas": [{"tipo": "Evidencia", "titulo": "Lighthouse antes de optimizar", "ruta": "semana-05/lighthouse-antes.html", "desc": "Auditoría de rendimiento, accesibilidad y buenas prácticas de la landing antes de aplicar las estrategias WPO.", "vivo": "Desplegar cada métrica y sus oportunidades de mejora.", "peso": "829 KB"}, {"tipo": "Evidencia", "titulo": "Lighthouse después de optimizar", "ruta": "semana-05/lighthouse-despues.html", "desc": "La misma auditoría tras optimizar imágenes, fuentes y carga diferida: la mitad de la comparación antes/después del APF1.", "vivo": "Comparar métrica por métrica con el informe anterior.", "peso": "971 KB"}]}, {"semana": "06", "mes": "septiembre", "tema": "Diseño físico de base de datos", "fichas": [{"tipo": "Entregable", "titulo": "Diccionario de datos", "ruta": "semana-06/diccionario-bd.html", "desc": "21 tablas y 144 columnas de los cuatro schemas: tipo, nulabilidad, clave y por qué se eligió cada tipo de dato.", "vivo": "Buscar columnas, cambiar entre tres temas y abrir la ficha de cada entidad en el ERD.", "peso": "705 KB"}, {"tipo": "Entregable", "titulo": "Diagrama entidad-relación", "ruta": "semana-06/erd.html", "desc": "El modelo físico por schema, con las relaciones internas y la proyección local entre servicios.", "vivo": "Clic en una entidad para ver sus columnas y relaciones.", "peso": "498 KB"}]}, {"semana": "08", "mes": "septiembre", "tema": "Diseño de controles de seguridad", "fichas": [{"tipo": "Entregable", "titulo": "Controles de seguridad", "ruta": "semana-08/controles-de-seguridad.html", "desc": "Arquitectura de autenticación, matriz RBAC de 5 roles y 12 permisos, mitigación OWASP Top 10, CORS, trazabilidad y límite de tasa.", "vivo": "Pulsar un rol filtra la matriz y sus endpoints; pulsar un campo del JWT lo explica.", "peso": "65 KB"}]}, {"semana": "09", "mes": "octubre", "tema": "APF2 · Despliegue, datos y seguridad en producción", "fichas": [{"tipo": "APF", "titulo": "Informe de pruebas de seguridad", "ruta": "semana-09/informe-seguridad.html", "desc": "OWASP ZAP, Nikto y escaneo de cabeceras contra producción, antes y después de la remediación.", "vivo": "Comparar hallazgos por severidad antes y después.", "peso": "78 KB"}, {"tipo": "APF", "titulo": "Controles de seguridad · versión 2", "ruta": "semana-09/controles-de-seguridad.html", "desc": "La actualización del taller de la semana 8 con lo ya implementado: estado de madurez control por control.", "vivo": "Semáforo de madurez y matriz RBAC filtrable.", "peso": "65 KB"}, {"tipo": "APF", "titulo": "Diccionario de datos · versión 2", "ruta": "semana-09/diccionario-bd.html", "desc": "El catálogo real de la base de datos en la nube, con las tablas que añadieron transferencias, auditoría y outbox.", "vivo": "Buscar columnas y recorrer el ERD actualizado.", "peso": "742 KB"}, {"tipo": "APF", "titulo": "Informe de pruebas y cobertura", "ruta": "semana-09/informe-pruebas.html", "desc": "Pirámide de pruebas y cobertura por servicio: JUnit, vitest, pytest y Playwright.", "vivo": "Gráficos de cobertura por servicio.", "peso": "11 KB"}, {"tipo": "APF", "titulo": "Diagramas de arquitectura", "ruta": "semana-09/diagramas.html", "desc": "Arquitectura de datos y replicación propuesta, patrón Repository y despliegue en AWS.", "vivo": "Diagramas por capas.", "peso": "14 KB"}, {"tipo": "APF", "titulo": "Diagrama de secuencia", "ruta": "semana-09/secuencia.html", "desc": "Inicio de sesión con segundo factor (HU-04) atravesando puertos y adaptadores.", "vivo": "Seguir el mensaje paso a paso.", "peso": "8 KB"}, {"tipo": "APF", "titulo": "Cronograma real", "ruta": "semana-09/cronograma.html", "desc": "Diagrama de Gantt: línea base contra ejecución real hasta el APF2.", "vivo": "Comparar lo planificado con lo ejecutado.", "peso": "7 KB"}]}, {"semana": "10", "mes": "octubre", "tema": "Calidad funcional (ISO/IEC 25010) y V&V", "fichas": [{"tipo": "Entregable", "titulo": "Calidad funcional y V&V", "ruta": "semana-10/calidad-funcional-y-vv.html", "desc": "Matriz de trazabilidad de 5 HU, auditoría de precisión numérica, métricas ISO/IEC 25023, modelo en V y guion UAT.", "vivo": "Trazabilidad inversa, 0.1 + 0.2 en vivo, simulación del fraude del redondeo y modelo en V pulsable.", "peso": "52 KB"}]}];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const total=SEMANAS.reduce((t,s)=>t+s.fichas.length,0);
+$("#cifras").innerHTML=`<div><b>${total}</b><span>piezas interactivas</span></div><div><b>${SEMANAS.length}</b><span>semanas con entregable</span></div><div><b>2</b><span>avances de proyecto</span></div>`;
+const tipos=["Todo",...new Set(SEMANAS.flatMap(s=>s.fichas.map(f=>f.tipo)))];
+$("#filtros").innerHTML=tipos.map((t,i)=>`<button type="button" data-t="${t}" aria-pressed="${i===0}">${t}</button>`).join("");
+$("#lista").innerHTML=SEMANAS.map(s=>`<article class="semana" data-tipos="${[...new Set(s.fichas.map(f=>f.tipo))].join(" ")}">
+ <div class="rotulo"><span class="num">${esc(s.semana)}</span><span class="mes">Semana ${esc(s.semana)} · ${esc(s.mes)}</span><span class="tema">${esc(s.tema)}</span></div>
+ <div class="fichas">${s.fichas.map((f,i)=>`<a class="ficha" data-tipo="${esc(f.tipo)}" href="${encodeURI(f.ruta)}" style="--d:${i*.08}s">
+  <span class="tipo ${esc(f.tipo)}">${esc(f.tipo)}</span><h3>${esc(f.titulo)}</h3><p>${esc(f.desc)}</p>
+  <div class="vivo">${esc(f.vivo)}</div><div class="pie"><span>${esc(f.peso)}</span><b>Abrir <i>→</i></b></div></a>`).join("")}</div></article>`).join("");
+$("#filtros").onclick=ev=>{const b=ev.target.closest("button");if(!b)return;const t=b.dataset.t;
+ $("#filtros").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+ document.querySelectorAll(".semana").forEach(s=>{s.hidden=t!=="Todo"&&!s.dataset.tipos.split(" ").includes(t);
+  s.querySelectorAll(".ficha").forEach(f=>f.style.display=(t==="Todo"||f.dataset.tipo===t)?"":"none")})};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("vista");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".ficha").forEach(f=>io.observe(f));
+addEventListener("scroll",()=>$("#nav").classList.toggle("solida",scrollY>40),{passive:true});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script>
+// Tejido andino: urdimbre (dorada) y trama (azul) que ondulan como tela y se levantan bajo el cursor.
+addEventListener("DOMContentLoaded",()=>{
+ const lienzo=document.getElementById("tejido");
+ if(!window.THREE){return}
+ const quieto=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const r=new THREE.WebGLRenderer({canvas:lienzo,antialias:true,alpha:true});
+ r.setPixelRatio(Math.min(devicePixelRatio,2));
+ const escena=new THREE.Scene();escena.fog=new THREE.Fog(0x061a2e,6,22);
+ const cam=new THREE.PerspectiveCamera(42,1,.1,60);cam.position.set(0,4.2,9.5);cam.lookAt(0,-.4,0);
+ const N=56,T=20,paso=T/(N-1),hilos=[];
+ const oro=new THREE.LineBasicMaterial({color:0xc59e41,transparent:true,opacity:.55});
+ const azul=new THREE.LineBasicMaterial({color:0x5aa0e6,transparent:true,opacity:.35});
+ const grupo=new THREE.Group();grupo.rotation.x=-.42;grupo.rotation.z=.12;escena.add(grupo);
+ for(let k=0;k<2;k++)for(let i=0;i<N;i++){
+  const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(N*3),3));
+  const l=new THREE.Line(g,k?azul:oro);l.userData={k,i};grupo.add(l);hilos.push(l)}
+ // Nudos: rombos del tocapu en algunos cruces
+ const nudosG=new THREE.BufferGeometry(),M=220,np=new Float32Array(M*3),ids=[];
+ for(let m=0;m<M;m++)ids.push([Math.floor(Math.random()*N),Math.floor(Math.random()*N)]);
+ nudosG.setAttribute("position",new THREE.BufferAttribute(np,3));
+ const nudos=new THREE.Points(nudosG,new THREE.PointsMaterial({color:0xe6c77a,size:.07,transparent:true,opacity:.9}));grupo.add(nudos);
+ const raton=new THREE.Vector2(9,9),obj=new THREE.Vector2(9,9);
+ addEventListener("pointermove",e=>{obj.set((e.clientX/innerWidth-.5)*T,(e.clientY/innerHeight-.5)*T)},{passive:true});
+ function z(x,y,t){const d=Math.hypot(x-raton.x,y-raton.y);
+  return .32*Math.sin(x*.55+t*.7)*Math.cos(y*.45+t*.5)+.14*Math.sin((x+y)*1.1-t*1.3)+.9*Math.exp(-d*d*.35)*Math.cos(d*2.2-t*3)}
+ function tejer(t){
+  raton.lerp(obj,.06);
+  for(const l of hilos){const p=l.geometry.attributes.position.array,{k,i}=l.userData,a=-T/2+i*paso;
+   for(let j=0;j<N;j++){const b=-T/2+j*paso,x=k?b:a,y=k?a:b;p[j*3]=x;p[j*3+1]=y;p[j*3+2]=z(x,y,t)+(k?.03:-.03)*Math.sin((i+j)*Math.PI/2)}
+   l.geometry.attributes.position.needsUpdate=true}
+  ids.forEach(([i,j],m)=>{const x=-T/2+i*paso,y=-T/2+j*paso;np[m*3]=x;np[m*3+1]=y;np[m*3+2]=z(x,y,t)+.02});
+  nudosG.attributes.position.needsUpdate=true}
+ function tam(){const w=lienzo.clientWidth,h=lienzo.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w<700?13:9.5;cam.updateProjectionMatrix()}
+ tam();addEventListener("resize",tam);
+ let visible=true;new IntersectionObserver(e=>visible=e[0].isIntersecting).observe(lienzo);
+ const t0=performance.now();
+ function cuadro(){const t=(performance.now()-t0)/1000;if(visible){tejer(t);grupo.rotation.z=.12+Math.sin(t*.08)*.05;r.render(escena,cam)}if(!quieto)requestAnimationFrame(cuadro)}
+ tejer(0);r.render(escena,cam);if(!quieto)requestAnimationFrame(cuadro);
+});
+</script>
+</body>
+</html>

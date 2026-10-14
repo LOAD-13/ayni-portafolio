@@ -1,0 +1,564 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Ayni Bank · Pruebas de seguridad</title>
+<style>
+:root{--azul:#064475;--azul2:#0b2a4a;--fondo:#f4f7fb;--borde:#dbe3ec;--texto:#1f2933;--sub:#5b6b7b;
+--ok:#1e7d4f;--okf:#e3f4ea;--aviso:#a15c00;--avisof:#fdf0dc;--mal:#b42318;--malf:#fde7e5;--info:#3b5b7a;--infof:#e8eef5}
+*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--fondo);color:var(--texto);font-size:14px}
+header{background:linear-gradient(120deg,var(--azul2),var(--azul));color:#fff;padding:28px 40px}
+header .marca{font-weight:800;letter-spacing:2px;font-size:13px;opacity:.85}header h1{margin:6px 0 4px;font-size:26px}
+header p{margin:0;opacity:.9}main{max-width:1280px;margin:0 auto;padding:24px 32px 48px}
+.card{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:20px 24px;margin:18px 0;box-shadow:0 1px 2px rgba(6,68,117,.05)}
+h2{color:var(--azul2);margin:0 0 12px}h3{color:var(--azul);margin:0 0 12px;font-size:17px}h4{margin:14px 0 8px;color:var(--azul2)}
+.titulo-corrida{margin-top:28px;padding-left:12px;border-left:5px solid var(--azul)}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.kpi{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:16px;text-align:center;border-top:4px solid var(--info)}
+.kpi .v{font-size:28px;font-weight:800}.kpi .l{color:var(--sub);font-size:12px;margin-top:4px}
+.kpi.ok{border-top-color:var(--ok)}.kpi.ok .v{color:var(--ok)}.kpi.aviso{border-top-color:var(--aviso)}.kpi.aviso .v{color:var(--aviso)}.kpi.mal{border-top-color:var(--mal)}.kpi.mal .v{color:var(--mal)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 10px;border-bottom:1px solid var(--borde);text-align:left;vertical-align:top}
+thead th{background:var(--infof);color:var(--azul2);font-weight:600}table.ficha th{width:120px;color:var(--sub);font-weight:600;background:none}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip.ok{background:var(--okf);color:var(--ok)}.chip.aviso,.chip.bajo{background:var(--avisof);color:var(--aviso)}
+.chip.mal,.chip.alto{background:var(--malf);color:var(--mal)}.chip.medio{background:#ffe9d6;color:#b54708}.chip.info{background:var(--infof);color:var(--info)}
+.sub{color:var(--sub);font-size:12px}.meta{color:var(--sub);margin:0 0 12px}.nota{color:var(--sub);font-size:12px;background:var(--fondo);padding:10px 12px;border-radius:8px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:24px}code{font-size:12px;word-break:break-all}
+pre{background:#0b2a4a;color:#e6edf5;padding:14px;border-radius:8px;overflow:auto;max-height:420px;font-size:12px}
+details summary{cursor:pointer;color:var(--azul);font-weight:600;margin:6px 0}
+.leyenda{display:flex;gap:18px;flex-wrap:wrap;color:var(--sub);font-size:12px;margin-top:6px}
+.graficos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.grafico{background:var(--fondo);border-radius:10px;padding:14px 16px}.grafico h4{margin:0 0 10px}
+.dona{display:flex;align-items:center;gap:16px}.c1{font-size:26px;font-weight:800;fill:var(--azul2)}.c2{font-size:11px;fill:var(--sub)}
+.ley{font-size:12px;margin:5px 0;white-space:nowrap}.ley i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.barra{display:grid;grid-template-columns:150px 1fr 84px;align-items:center;gap:8px;margin:7px 0;font-size:12px}
+.barra .et{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pista{background:#e3e9f0;border-radius:6px;height:12px;display:block}
+.relleno{display:block;height:12px;border-radius:6px}.barra .val{color:var(--sub);text-align:right}
+footer{color:var(--sub);text-align:center;font-size:12px;padding:20px}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.dos{grid-template-columns:1fr}main{padding:16px}}
+</style></head><body>
+<header><div class="marca">AYNI BANK</div><h1>Informe de pruebas de seguridad en producción</h1>
+<p>Objetivo: <b>https://ayni.produccion.ejemplo</b> · Workflow <code>seguridad.yml</code> de GitHub Actions · AWS us-east-1</p></header>
+<main>
+<section class="card"><h2>Alcance y herramientas</h2>
+<table><thead><tr><th>Herramienta</th><th>Qué evalúa</th><th>Tipo</th></tr></thead><tbody>
+<tr><td><b>OWASP ZAP baseline</b></td><td>Cabeceras, cookies, divulgación de información y configuración de la aplicación web</td><td>DAST pasivo</td></tr>
+<tr><td><b>Nmap</b></td><td>Puertos expuestos a internet, servicios y robustez de los cifrados TLS</td><td>Reconocimiento de red</td></tr>
+<tr><td><b>testssl.sh</b></td><td>Protocolos, certificado y vulnerabilidades conocidas de TLS (Heartbleed, POODLE, ROBOT...)</td><td>Auditoría TLS</td></tr>
+<tr><td><b>Nikto</b></td><td>Configuración del servidor web, cabeceras y ficheros expuestos</td><td>Escáner de servidor</td></tr>
+</tbody></table>
+<div class="leyenda"><span><span class="chip alto">Alto</span> explotable con impacto</span><span><span class="chip medio">Medio</span> debilidad a corregir</span>
+<span><span class="chip bajo">Bajo</span> endurecimiento recomendado</span><span><span class="chip info">Informativo</span> sin riesgo directo</span></div></section>
+<section class='card'><h2>Antes y después de la remediación</h2><div class='graficos'><div class="grafico"><h4>Alertas de riesgo medio</h4><div class="barra"><span class="et">Antes</span><span class="pista"><span class="relleno" style="width:50%;background:#9aa9b9"></span></span><span class="val">1</span></div><div class="barra"><span class="et">Después</span><span class="pista"><span class="relleno" style="width:100%;background:#e07b1a"></span></span><span class="val">2</span></div></div><div class="grafico"><h4>Alertas de riesgo bajo</h4><div class="barra"><span class="et">Antes</span><span class="pista"><span class="relleno" style="width:100%;background:#9aa9b9"></span></span><span class="val">3</span></div><div class="barra"><span class="et">Después</span><span class="pista"><span class="relleno" style="width:33%;background:#e8b13d"></span></span><span class="val">1</span></div></div><div class="grafico"><h4>Alertas de riesgo informativo</h4><div class="barra"><span class="et">Antes</span><span class="pista"><span class="relleno" style="width:100%;background:#9aa9b9"></span></span><span class="val">9</span></div><div class="barra"><span class="et">Después</span><span class="pista"><span class="relleno" style="width:100%;background:#7d93ab"></span></span><span class="val">9</span></div></div></div><table><thead><tr><th>Indicador</th><th>Antes</th><th>Después</th><th>Resultado</th></tr></thead><tbody><tr><td>Alertas ZAP de riesgo alto</td><td>0</td><td>0</td><td><span class="chip info">=</span></td></tr><tr><td>Alertas ZAP de riesgo medio</td><td>1</td><td>2</td><td><span class="chip mal">Empeora</span></td></tr><tr><td>Alertas ZAP de riesgo bajo</td><td>3</td><td>1</td><td><span class="chip ok">Mejora</span></td></tr><tr><td>Alertas ZAP de riesgo informativo</td><td>9</td><td>9</td><td><span class="chip info">=</span></td></tr><tr><td>Hallazgos Nikto</td><td>8</td><td>4</td><td><span class="chip ok">Mejora</span></td></tr><tr><td>Puertos abiertos</td><td>2</td><td>2</td><td><span class="chip info">=</span></td></tr></tbody></table><h4>Hallazgos de ZAP resueltos</h4><ul><li>Falta la cabecera Content-Security-Policy</li><li>Falta Cross-Origin-Opener-Policy</li><li>Falta Cross-Origin-Resource-Policy</li></ul></section><section class='corrida' id='despues'><h2 class='titulo-corrida'>Corrida posterior a la remediación</h2><div class='kpis'><div class="kpi ok"><div class="v">0</div><div class="l">Riesgo alto (ZAP)</div></div><div class="kpi aviso"><div class="v">2</div><div class="l">Riesgo medio (ZAP)</div></div><div class="kpi aviso"><div class="v">1</div><div class="l">Riesgo bajo (ZAP)</div></div><div class="kpi ok"><div class="v">2</div><div class="l">Puertos abiertos</div></div><div class="kpi ok"><div class="v">A</div><div class="l">Nota TLS (Nmap)</div></div><div class="kpi ok"><div class="v">13/14</div><div class="l">Pruebas TLS superadas</div></div></div><section class='card'><h3>Resumen gráfico</h3><div class="graficos"><div class="grafico"><h4>Alertas de ZAP por riesgo</h4><div class="dona"><svg viewBox="0 0 180 180" width="180" height="180"><circle cx="90" cy="90" r="70" fill="none" stroke="#eef2f7" stroke-width="26"/><path d="M90.0,20.0 A70,70 0 0 1 150.6,55.0" fill="none" stroke="#e07b1a" stroke-width="26"/><path d="M150.6,55.0 A70,70 0 0 1 160.0,90.0" fill="none" stroke="#e8b13d" stroke-width="26"/><path d="M160.0,90.0 A70,70 0 1 1 90.0,20.0" fill="none" stroke="#7d93ab" stroke-width="26"/><text x="90" y="88" text-anchor="middle" class="c1">12</text><text x="90" y="108" text-anchor="middle" class="c2">alertas</text></svg><div><div class="ley"><i style="background:#b42318"></i>Alto <b>0</b></div><div class="ley"><i style="background:#e07b1a"></i>Medio <b>2</b></div><div class="ley"><i style="background:#e8b13d"></i>Bajo <b>1</b></div><div class="ley"><i style="background:#7d93ab"></i>Informativo <b>9</b></div></div></div></div><div class="grafico"><h4>Instancias por hallazgo (los seis principales)</h4><div class="barra"><span class="et">CSP permite estilos en línea (unsafe-inline)</span><span class="pista"><span class="relleno" style="width:100%;background:#e07b1a"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">CSP permite scripts en línea (unsafe-inline)</span><span class="pista"><span class="relleno" style="width:100%;background:#e07b1a"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Falta Cross-Origin-Embedder-Policy</span><span class="pista"><span class="relleno" style="width:100%;background:#e8b13d"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Aplicación web moderna (SPA)</span><span class="pista"><span class="relleno" style="width:100%;background:#7d93ab"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Contenido almacenable en caché</span><span class="pista"><span class="relleno" style="width:100%;background:#7d93ab"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Revisar directivas Cache-Control</span><span class="pista"><span class="relleno" style="width:100%;background:#7d93ab"></span></span><span class="val">5 URL</span></div></div><div class="grafico"><h4>Pruebas de vulnerabilidades TLS</h4><div class="dona"><svg viewBox="0 0 180 180" width="180" height="180"><circle cx="90" cy="90" r="70" fill="none" stroke="#eef2f7" stroke-width="26"/><path d="M90.0,20.0 A70,70 0 1 1 59.6,26.9" fill="none" stroke="#1e7d4f" stroke-width="26"/><path d="M59.6,26.9 A70,70 0 0 1 90.0,20.0" fill="none" stroke="#e8b13d" stroke-width="26"/><text x="90" y="88" text-anchor="middle" class="c1">13/14</text><text x="90" y="108" text-anchor="middle" class="c2">superadas</text></svg><div><div class="ley"><i style="background:#1e7d4f"></i>No vulnerable <b>13</b></div><div class="ley"><i style="background:#e8b13d"></i>Revisar <b>1</b></div></div></div></div><div class="grafico"><h4>Protocolos: configuración correcta</h4><div class="barra"><span class="et">SSLv2</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">SSLv3</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">TLS 1</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">TLS 1.1</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">TLS 1.2</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">Ofrecido</span></div><div class="barra"><span class="et">TLS 1.3</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">Ofrecido</span></div></div></div></section><section class='card'><h3>1 · OWASP ZAP · análisis de la aplicación web</h3><p class='meta'>Objetivo <b>https://ayni.produccion.ejemplo</b> · Sat, 3 Oct 2026 00:55:49 · OWASP ZAP baseline (escaneo pasivo)</p><table><thead><tr><th>Riesgo</th><th>Hallazgo</th><th>Recomendación de ZAP</th><th>Tratamiento del equipo</th></tr></thead><tbody><tr><td><span class="chip medio">Medio</span></td><td><b>CSP permite estilos en línea (unsafe-inline)</b><div class='sub'>CSP: style-src unsafe-inline · CWE-693 · confianza 3</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/pendiente<br>https://ayni.produccion.ejemplo/registro<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</td><td>Aceptado: estilos en línea de Next.js y del diseño; no ejecutan código. Se retirará junto con los nonces.</td></tr><tr><td><span class="chip medio">Medio</span></td><td><b>CSP permite scripts en línea (unsafe-inline)</b><div class='sub'>CSP: script-src unsafe-inline · CWE-693 · confianza 3</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/pendiente<br>https://ayni.produccion.ejemplo/registro<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</td><td>Aceptado temporalmente: la hidratación de Next.js inserta scripts en línea. Mitigación prevista: nonces por petición en el middleware. La CSP ya bloquea scripts de otros orígenes, objetos e incrustación.</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><b>Falta Cross-Origin-Embedder-Policy</b><div class='sub'>Cross-Origin-Embedder-Policy Header Missing or Invalid · CWE-693 · confianza 2</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/<br>https://ayni.produccion.ejemplo/ingresar<br>https://ayni.produccion.ejemplo/pendiente<br>https://ayni.produccion.ejemplo/registro</div></details></td><td class='sub'>Ensure that the application/web server sets the Cross-Origin-Embedder-Policy header appropriately, and that it sets the Cross-Origin-Embedder-Policy header to &#x27;require-corp&#x27; for documents.  If possible, ensure that the e</td><td>Aceptado: require-corp bloquearia recursos legítimos y la app no usa SharedArrayBuffer.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Aplicación web moderna (SPA)</b><div class='sub'>Modern Web Application · CWE--1 · confianza 2</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo/%2Fpen%2Flanding-2cc23c14b5e9.png&amp;w=256&amp;q=75<br>https://ayni.produccion.ejemplo/%2Fpen%2Flanding-cc4dc915faa1.png&amp;w=256&amp;q=75<br>https://ayni.produccion.ejemplo/%2Fpen%2Flanding-cc4dc915faa1.png&amp;w=96&amp;q=75<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>This is an informational alert and so no changes are required.</td><td>Informativo: describe la tecnología, no es una vulnerabilidad.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Contenido almacenable en caché</b><div class='sub'>Storable and Cacheable Content · CWE-524 · confianza 2</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/_next/static/chunks/main-app-37faa7c6711a10a3.js<br>https://ayni.produccion.ejemplo/_next/static/chunks/webpack-f71789aaeab3a6ad.js<br>https://ayni.produccion.ejemplo/_next/static/css/7b71d2ad750371f9.css<br>https://ayni.produccion.ejemplo/icon.png?47c655848b520312</div></details></td><td class='sub'>Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retriev</td><td>Aceptado: páginas estáticas públicas, sin datos personales.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Contenido en Base64 en la respuesta</b><div class='sub'>Base64 Disclosure · CWE-319 · confianza 2</div><details><summary>2 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo/_next/image?q=75&amp;url=%2Fpen%2Flanding-543cde9cf013.png&amp;w=384<br>https://ayni.produccion.ejemplo/_next/static/chunks/688-3bdf0fee2ce30626.js</div></details></td><td class='sub'>Manually confirm that the Base64 data does not leak sensitive information, and that the data cannot be aggregated/used to exploit other vulnerabilities.</td><td>Falso positivo: son identificadores de compilación de Next.js, no datos.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Contenido no almacenable en caché</b><div class='sub'>Non-Storable Content · CWE-524 · confianza 2</div><details><summary>2 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>The content may be marked as storable by ensuring that the following conditions are satisfied:  The request method must be understood by the cache and defined as being cacheable (&quot;GET&quot;, &quot;HEAD&quot;, and &quot;POST&quot; are currently d</td><td>Esperado: las respuestas de la API no deben guardarse en caché.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-Dest</b><div class='sub'>Sec-Fetch-Dest Header is Missing · CWE-352 · confianza 3</div><details><summary>3 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that Sec-Fetch-Dest header is included in request headers.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-Mode</b><div class='sub'>Sec-Fetch-Mode Header is Missing · CWE-352 · confianza 3</div><details><summary>3 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that Sec-Fetch-Mode header is included in request headers.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-Site</b><div class='sub'>Sec-Fetch-Site Header is Missing · CWE-352 · confianza 3</div><details><summary>3 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that Sec-Fetch-Site header is included in request headers.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-User</b><div class='sub'>Sec-Fetch-User Header is Missing · CWE-352 · confianza 3</div><details><summary>3 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that Sec-Fetch-User header is included in user initiated requests.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Revisar directivas Cache-Control</b><div class='sub'>Re-examine Cache-control Directives · CWE-525 · confianza 1</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/<br>https://ayni.produccion.ejemplo/ingresar<br>https://ayni.produccion.ejemplo/pendiente<br>https://ayni.produccion.ejemplo/registro</div></details></td><td class='sub'>For secure content, ensure the cache-control HTTP header is set with &quot;no-cache, no-store, must-revalidate&quot;. If an asset should be cached consider setting the directives &quot;public, max-age, immutable&quot;.</td><td>Aceptado: aplica a páginas publicas sin datos del cliente.</td></tr></tbody></table></section><section class='card'><h3>2 · Nmap · superficie expuesta y cifrados</h3><div class='dos'><div><h4>Puertos expuestos a internet</h4><table><thead><tr><th>Puerto</th><th>Estado</th><th>Servicio</th><th>Versión</th></tr></thead><tbody><tr><td><b>80/tcp</b></td><td><span class="chip ok">open</span></td><td>http</td><td>Caddy httpd</td></tr><tr><td><b>443/tcp</b></td><td><span class="chip ok">open</span></td><td>ssl/http</td><td>Caddy httpd</td></tr></tbody></table><p class='nota'>Solo Caddy (80 redirige a 443). La base de datos, RabbitMQ, los servicios y Grafana no tienen puertos públicos: el grupo de seguridad de la EC2 solo abre 80 y 443, y RDS solo acepta conexiones desde la instancia.</p></div><div><h4>Cifrados TLS ofrecidos · nota mínima <span class="chip ok">A</span></h4><table><thead><tr><th>Suite</th><th>Nota</th></tr></thead><tbody><tr><td><code>TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_AKE_WITH_AES_128_GCM_SHA256</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_AKE_WITH_AES_256_GCM_SHA384</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_AKE_WITH_CHACHA20_POLY1305_SHA256</code></td><td><span class="chip ok">A</span></td></tr></tbody></table></div></div></section><section class='card'><h3>3 · testssl.sh · configuración TLS</h3><div class='dos'><div><h4>Protocolos</h4><table><thead><tr><th>Protocolo</th><th>Estado</th><th>Evaluación</th></tr></thead><tbody><tr><td><b>SSLv2</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>SSLv3</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1.1</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1.2</b></td><td>Ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1.3</b></td><td>Ofrecido</td><td><span class="chip ok">Correcto</span></td></tr></tbody></table><h4>Certificado</h4><table class='ficha'><tbody><tr><th>Emisor</th><td>YE1 (Let&#x27;s Encrypt from US)</td></tr><tr><th>Validez</th><td>89 &gt;= 30 days (2026-10-02 04:45 --&gt; 2026-12-31 04:45)</td></tr><tr><th>Clave</th><td>EC 256 bits (curve P-256)</td></tr><tr><th>Firma</th><td>ECDSA with SHA384</td></tr><tr><th>HSTS</th><td>365 days=31536000 s, includeSubDomains</td></tr><tr><th>Transparencia</th><td>yes (certificate extension)</td></tr></tbody></table></div><div><h4>Vulnerabilidades conocidas de TLS</h4><table><thead><tr><th>Prueba</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody><tr><td>Heartbleed (CVE-2014-0160)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK), no heartbeat extension</td></tr><tr><td>CCS (CVE-2014-0224)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>ROBOT</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>Server does not support any cipher suites that use RSA key transport</td></tr><tr><td>Secure Renegotiation (RFC 5746)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>supported (OK)</td></tr><tr><td>Secure Client-Initiated Renegotiation</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>CRIME, TLS (CVE-2012-4929)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>BREACH (CVE-2013-3587)</td><td><span class="chip aviso">Revisar</span></td><td class='sub'>potentially NOT ok, &quot;gzip deflate&quot; HTTP compression detected. - only supplied &quot;/&quot; tested</td></tr><tr><td>POODLE, SSL (CVE-2014-3566)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK), no SSLv3 support</td></tr><tr><td>TLS_FALLBACK_SCSV (RFC 7507)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>No fallback possible (OK), no protocol below TLS 1.2 offered</td></tr><tr><td>SWEET32 (CVE-2016-2183, CVE-2016-6329)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>FREAK (CVE-2015-0204)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>DROWN (CVE-2016-0800, CVE-2016-0703)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable on this host and port (OK)</td></tr><tr><td>BEAST (CVE-2011-3389)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK), no SSL3 or TLS1</td></tr><tr><td>RC4 (CVE-2013-2566, CVE-2015-2808)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>no RC4 ciphers detected (OK)</td></tr></tbody></table><p class='nota'>BREACH aparece como potencial porque Caddy comprime con gzip. No aplica a la API: los secretos (JWT) viajan en cabeceras y cookies HttpOnly, no en cuerpos comprimidos con contenido controlado por el atacante.</p></div></div></section><section class='card'><h3>4 · Nikto · servidor web</h3><table><thead><tr><th>Nivel</th><th>Hallazgo</th><th>Tratamiento</th></tr></thead><tbody><tr><td><span class="chip info">Info</span></td><td><code>GET /: Retrieved via header: 1.1 Caddy.</code></td><td>Informativo.</td></tr><tr><td><span class="chip info">Info</span></td><td><code>GET /: An alt-svc header was found which is advertising HTTP/3. The endpoint is: &#x27;:443&#x27;. Nikto cannot test HTTP/3 over QUIC. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/alt-svc: </code></td><td>Informativo.</td></tr><tr><td><span class="chip info">Info</span></td><td><code>GET /icons/: Uncommon header(s) &#x27;refresh&#x27; found, with contents: 0;url=/icons.</code></td><td>Informativo.</td></tr><tr><td><span class="chip info">Info</span></td><td><code>OPTIONS OPTIONS: Allowed HTTP Methods: ARRAY(0x556f8ea39700) .</code></td><td>Informativo.</td></tr></tbody></table></section><section class='card crudos'><h3>Salidas originales</h3><details><summary>Salida original de nmap</summary><pre>Objetivo: ayni.produccion.ejemplo
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-10-03 00:54 UTC
+Nmap scan report for ayni.produccion.ejemplo (x.x.x.x)
+Host is up (0.031s latency).
+rDNS record for x.x.x.x: ec2-produccion.compute-1.amazonaws.com
+
+PORT    STATE SERVICE  VERSION
+80/tcp  open  http     Caddy httpd
+|_http-server-header: Caddy
+443/tcp open  ssl/http Caddy httpd
+| ssl-enum-ciphers: 
+|   TLSv1.2: 
+|     ciphers: 
+|       TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 (secp256r1) - A
+|       TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 (secp256r1) - A
+|       TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 (secp256r1) - A
+|     compressors: 
+|       NULL
+|     cipher preference: client
+|   TLSv1.3: 
+|     ciphers: 
+|       TLS_AKE_WITH_AES_128_GCM_SHA256 (ecdh_x25519) - A
+|       TLS_AKE_WITH_AES_256_GCM_SHA384 (ecdh_x25519) - A
+|       TLS_AKE_WITH_CHACHA20_POLY1305_SHA256 (ecdh_x25519) - A
+|     cipher preference: server
+|_  least strength: A
+|_http-server-header: Caddy
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 14.09 seconds
+</pre></details><details><summary>Salida original de testssl</summary><pre>## Scan started as: &quot;testssl.sh --quiet --color 0 --logfile /out/testssl.txt ayni.produccion.ejemplo:443&quot;
+## at 1085425d3200:/home/testssl/bin/openssl.Linux.x86_64
+## version testssl: 3.2.4  from 
+## version openssl: &quot;1.0.2-bad&quot; from &quot;Fri Mar 28 16:54:51 2025&quot;)
+
+ Start 2026-10-03 00:54:55        --&gt;&gt; x.x.x.x:443 (ayni.produccion.ejemplo) &lt;&lt;--
+
+ rDNS (x.x.x.x): ec2-produccion.compute-1.amazonaws.com.
+ Service detected:       HTTP
+
+ Testing protocols via sockets except NPN+ALPN 
+
+ SSLv2      not offered (OK)
+ SSLv3      not offered (OK)
+ TLS 1      not offered
+ TLS 1.1    not offered
+ TLS 1.2    offered (OK)
+ TLS 1.3    offered (OK): final
+ NPN/SPDY   not offered
+ ALPN/HTTP2 h2, http/1.1 (offered)
+
+ Testing cipher categories 
+
+ NULL ciphers (no encryption)                      not offered (OK)
+ Anonymous NULL Ciphers (no authentication)        not offered (OK)
+ Export ciphers (w/o ADH+NULL)                     not offered (OK)
+ LOW: 64 Bit + DES, RC[2,4], MD5 (w/o export)      not offered (OK)
+ Triple DES Ciphers / IDEA                         not offered
+ Obsoleted CBC ciphers (AES, ARIA etc.)            not offered
+ Strong encryption (AEAD ciphers) with no FS       not offered
+ Forward Secrecy strong encryption (AEAD ciphers)  offered (OK)
+
+
+ Testing server&#x27;s cipher preferences 
+
+Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Cipher Suite Name (IANA/RFC)
+-----------------------------------------------------------------------------------------------------------------------------
+SSLv2
+ - 
+SSLv3
+ - 
+TLSv1
+ - 
+TLSv1.1
+ - 
+TLSv1.2 (server order -- server prioritizes ChaCha ciphers when preferred by clients)
+ xc02b   ECDHE-ECDSA-AES128-GCM-SHA256     ECDH 256   AESGCM      128      TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256            
+ xc02c   ECDHE-ECDSA-AES256-GCM-SHA384     ECDH 256   AESGCM      256      TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384            
+ xcca9   ECDHE-ECDSA-CHACHA20-POLY1305     ECDH 256   ChaCha20    256      TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256      
+TLSv1.3 (no server order, thus listed by strength)
+ x1302   TLS_AES_256_GCM_SHA384            ECDH/MLKEM AESGCM      256      TLS_AES_256_GCM_SHA384                             
+ x1303   TLS_CHACHA20_POLY1305_SHA256      ECDH/MLKEM ChaCha20    256      TLS_CHACHA20_POLY1305_SHA256                       
+ x1301   TLS_AES_128_GCM_SHA256            ECDH/MLKEM AESGCM      128      TLS_AES_128_GCM_SHA256                             
+
+ Has server cipher order?     yes (OK) -- only for &lt; TLS 1.3
+
+
+ Testing robust forward secrecy (FS) -- omitting Null Authentication/Encryption, 3DES, RC4 
+
+ FS is offered (OK)           TLS_AES_256_GCM_SHA384
+                              TLS_CHACHA20_POLY1305_SHA256
+                              ECDHE-ECDSA-AES256-GCM-SHA384
+                              ECDHE-ECDSA-CHACHA20-POLY1305
+                              TLS_AES_128_GCM_SHA256
+                              ECDHE-ECDSA-AES128-GCM-SHA256 
+ KEMs offered                 X25519MLKEM768 
+ Elliptic curves offered:     prime256v1 X25519 
+ TLS 1.2 sig_algs offered:    ECDSA+SHA512 ECDSA+SHA384 ECDSA+SHA256 
+ TLS 1.3 sig_algs offered:    ECDSA+SHA256 
+
+ Testing server defaults (Server Hello) 
+
+ TLS extensions (standard)    &quot;server name/#0&quot; &quot;EC point formats/#11&quot;
+                              &quot;application layer protocol negotiation/#16&quot;
+                              &quot;extended master secret/#23&quot; &quot;session ticket/#35&quot;
+                              &quot;supported versions/#43&quot; &quot;key share/#51&quot;
+                              &quot;renegotiation info/#65281&quot;
+ Session Ticket RFC 5077 hint no -- no lifetime advertised
+ SSL Session ID support       yes
+ Session Resumption           Tickets no, ID: no
+ TLS clock skew               Random values, no fingerprinting possible 
+ Certificate Compression      none
+ Client Authentication        none
+ Signature Algorithm          ECDSA with SHA384
+ Server key size              EC 256 bits (curve P-256)
+ Server key usage             Digital Signature
+ Server extended key usage    TLS Web Server Authentication
+ Serial                       051024350ADA4CEBEC3FFF879EFC14A7EF47 (OK: length 18)
+ Fingerprints                 SHA1 F031FC868464321B8E9706CD6C20D29C41A2E89C
+                              SHA256 2CC6A1193C606674A213FF4A9EC4A6B611151D7850DA713A8712F0636742ADF8
+ Common Name (CN)             ayni.produccion.ejemplo  (request w/o SNI didn&#x27;t succeed, usual for EC certificates)
+ subjectAltName (SAN)         ayni.produccion.ejemplo 
+ Trust (hostname)             Ok via SAN and CN (SNI mandatory)
+ Chain of trust               Ok   
+ EV cert (experimental)       no 
+ Certificate Validity (UTC)   89 &gt;= 30 days (2026-10-02 04:45 --&gt; 2026-12-31 04:45)
+ ETS/&quot;eTLS&quot;, visibility info  not present
+ Certificate Revocation List  http://ye1.c.lencr.org/72.crl
+ OCSP URI                     --
+ OCSP stapling                not offered
+ OCSP must staple extension   --
+ DNS CAA RR (experimental)    not offered
+ Certificate Transparency     yes (certificate extension)
+ Certificates provided        4
+ Issuer                       YE1 (Let&#x27;s Encrypt from US)
+ Intermediate cert validity   #1: ok &gt; 40 days (2028-09-02 23:59). YE1 &lt;-- Root YE
+                              #2: ok &gt; 40 days (2032-09-02 23:59). Root YE &lt;-- ISRG Root X2
+                              #3: ok &gt; 40 days (2032-09-02 23:59). ISRG Root X2 &lt;-- ISRG Root X1
+ Intermediate Bad OCSP (exp.) Ok
+
+
+ Testing HTTP header response @ &quot;/&quot; 
+
+ HTTP Status Code             200 OK
+ HTTP clock skew              0 sec from localtime
+ Strict Transport Security    365 days=31536000 s, includeSubDomains
+ Public Key Pinning           --
+ Server banner                (no &quot;Server&quot; line in header, interesting!)
+ Application banner           --
+ Cookie(s)                    (none issued at &quot;/&quot;)
+ Security headers             X-Frame-Options: DENY
+                              X-Content-Type-Options: nosniff
+                              Content-Security-Policy: default-src &#x27;self&#x27;;
+                                script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;; style-src
+                                &#x27;self&#x27; &#x27;unsafe-inline&#x27;; img-src &#x27;self&#x27; data:
+                                blob:; media-src &#x27;self&#x27; blob:; font-src &#x27;self&#x27;
+                                data:; connect-src &#x27;self&#x27;
+                                https://*.s3.amazonaws.com
+                                https://*.s3.us-east-1.amazonaws.com;
+                                frame-ancestors &#x27;none&#x27;; base-uri &#x27;self&#x27;;
+                                form-action &#x27;self&#x27;; object-src &#x27;none&#x27;;
+                                upgrade-insecure-requests
+                              Permissions-Policy: camera=(self), microphone=(),
+                                geolocation=()
+                              Cross-Origin-Opener-Policy: same-origin
+                              Cross-Origin-Resource-Policy: same-origin
+                              Referrer-Policy: strict-origin-when-cross-origin
+                              Cache-Control: s-maxage=31536000
+ Reverse Proxy banner         Via: 1.1 Caddy
+
+
+ Testing vulnerabilities 
+
+ Heartbleed (CVE-2014-0160)                not vulnerable (OK), no heartbeat extension
+ CCS (CVE-2014-0224)                       not vulnerable (OK)
+ Ticketbleed (CVE-2016-9244), experiment.  not vulnerable (OK)
+ ROBOT                                     Server does not support any cipher suites that use RSA key transport
+ Secure Renegotiation (RFC 5746)           supported (OK)
+ Secure Client-Initiated Renegotiation     not vulnerable (OK)
+ CRIME, TLS (CVE-2012-4929)                not vulnerable (OK)
+ BREACH (CVE-2013-3587)                    potentially NOT ok, &quot;gzip deflate&quot; HTTP compression detected. - only supplied &quot;/&quot; tested
+                                           Can be ignored for static pages or if no secrets in the page
+ POODLE, SSL (CVE-2014-3566)               not vulnerable (OK), no SSLv3 support
+ TLS_FALLBACK_SCSV (RFC 7507)              No fallback possible (OK), no protocol below TLS 1.2 offered
+ SWEET32 (CVE-2016-2183, CVE-2016-6329)    not vulnerable (OK)
+ FREAK (CVE-2015-0204)                     not vulnerable (OK)
+ DROWN (CVE-2016-0800, CVE-2016-0703)      not vulnerable on this host and port (OK)
+                                           no RSA certificate, thus certificate can&#x27;t be used with SSLv2 elsewhere
+ LOGJAM (CVE-2015-4000), experimental      not vulnerable (OK): no DH EXPORT ciphers, no DH key detected with &lt;= TLS 1.2
+ BEAST (CVE-2011-3389)                     not vulnerable (OK), no SSL3 or TLS1
+ LUCKY13 (CVE-2013-0169), experimental     not vulnerable (OK)
+ Winshock (CVE-2014-6321), experimental    not vulnerable (OK)
+ RC4 (CVE-2013-2566, CVE-2015-2808)        no RC4 ciphers detected (OK)
+
+
+ Running client simulations (HTTP) via sockets 
+
+ Browser                      Protocol  Cipher Suite Name (OpenSSL)       Forward Secrecy
+------------------------------------------------------------------------------------------------
+ Android 7.0 (native)         TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ Android 8.1 (native)         TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     253 bit ECDH (X25519)
+ Android 9.0 (native)         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 10.0 (native)        TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 11/12 (native)       TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 13/14 (native)       TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 15 (native)          TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Chrome 101 (Win 10)          TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Chromium 137 (Win 11)        TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Firefox 100 (Win 10)         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Firefox 137 (Win 11)         TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ IE 8 Win 7                   No connection
+ IE 11 Win 7                  TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ IE 11 Win 8.1                TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ IE 11 Win Phone 8.1          TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ IE 11 Win 10                 TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ Edge 15 Win 10               TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     253 bit ECDH (X25519)
+ Edge 101 Win 10 21H2         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Edge 133 Win 11 23H2         TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Safari 18.4 (iOS 18.4)       TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Safari 15.4 (macOS 12.3.1)   TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Safari 18.4 (macOS 15.4)     TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Java 7u25                    No connection
+ Java 8u442 (OpenJDK)         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Java 11.0.2 (OpenJDK)        TLSv1.3   TLS_AES_128_GCM_SHA256            256 bit ECDH (P-256)
+ Java 17.0.3 (OpenJDK)        TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Java 21.0.6 (OpenJDK)        TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ go 1.17.8                    TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ LibreSSL 3.3.6 (macOS)       TLSv1.3   TLS_CHACHA20_POLY1305_SHA256      253 bit ECDH (X25519)
+ OpenSSL 1.0.2e               TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ OpenSSL 1.1.1d (Debian)      TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ OpenSSL 3.0.15 (Debian)      TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ OpenSSL 3.5.0 (git)          TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Apple Mail (16.0)            TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ Thunderbird (91.9)           TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+
+
+ Rating (experimental) 
+
+ Rating specs (not complete)  SSL Labs&#x27;s &#x27;SSL Server Rating Guide&#x27; (version 2009r from 2025-05-16)
+ Specification documentation  https://github.com/ssllabs/research/wiki/SSL-Server-Rating-Guide
+ Protocol Support (weighted)  100 (30)
+ Key Exchange     (weighted)  100 (30)
+ Cipher Strength  (weighted)  90 (36)
+ Final Score                  96
+ Overall Grade                A+
+
+ Done 2026-10-03 00:55:47 [  55s] --&gt;&gt; x.x.x.x:443 (ayni.produccion.ejemplo) &lt;&lt;--
+
+
+</pre></details><details><summary>Salida original de nikto</summary><pre>- Nikto v2.6.1/
++ Target Host: ayni.produccion.ejemplo
++ Target Port: 443
++ GET /: Retrieved via header: 1.1 Caddy.
++ GET /: An alt-svc header was found which is advertising HTTP/3. The endpoint is: &#x27;:443&#x27;. Nikto cannot test HTTP/3 over QUIC. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/alt-svc: 
++ GET /icons/: Uncommon header(s) &#x27;refresh&#x27; found, with contents: 0;url=/icons.
++ SSL Info:           Subject:  /CN=ayni.produccion.ejemplo
+                      CN:       ayni.produccion.ejemplo
+                      SAN:      ayni.produccion.ejemplo
+                      Ciphers:  TLS_AES_128_GCM_SHA256
+                      Issuer:   /C=US/O=Let&#x27;s Encrypt/CN=YE1
++ OPTIONS OPTIONS: Allowed HTTP Methods: ARRAY(0x556f8ea39700) .
+</pre></details></section></section><section class='corrida' id='antes'><h2 class='titulo-corrida'>Corrida inicial</h2><div class='kpis'><div class="kpi ok"><div class="v">0</div><div class="l">Riesgo alto (ZAP)</div></div><div class="kpi aviso"><div class="v">1</div><div class="l">Riesgo medio (ZAP)</div></div><div class="kpi aviso"><div class="v">3</div><div class="l">Riesgo bajo (ZAP)</div></div><div class="kpi ok"><div class="v">2</div><div class="l">Puertos abiertos</div></div><div class="kpi ok"><div class="v">A</div><div class="l">Nota TLS (Nmap)</div></div><div class="kpi ok"><div class="v">13/14</div><div class="l">Pruebas TLS superadas</div></div></div><section class='card'><h3>Resumen gráfico</h3><div class="graficos"><div class="grafico"><h4>Alertas de ZAP por riesgo</h4><div class="dona"><svg viewBox="0 0 180 180" width="180" height="180"><circle cx="90" cy="90" r="70" fill="none" stroke="#eef2f7" stroke-width="26"/><path d="M90.0,20.0 A70,70 0 0 1 122.5,28.0" fill="none" stroke="#e07b1a" stroke-width="26"/><path d="M122.5,28.0 A70,70 0 0 1 155.5,114.8" fill="none" stroke="#e8b13d" stroke-width="26"/><path d="M155.5,114.8 A70,70 0 1 1 90.0,20.0" fill="none" stroke="#7d93ab" stroke-width="26"/><text x="90" y="88" text-anchor="middle" class="c1">13</text><text x="90" y="108" text-anchor="middle" class="c2">alertas</text></svg><div><div class="ley"><i style="background:#b42318"></i>Alto <b>0</b></div><div class="ley"><i style="background:#e07b1a"></i>Medio <b>1</b></div><div class="ley"><i style="background:#e8b13d"></i>Bajo <b>3</b></div><div class="ley"><i style="background:#7d93ab"></i>Informativo <b>9</b></div></div></div></div><div class="grafico"><h4>Instancias por hallazgo (los seis principales)</h4><div class="barra"><span class="et">Falta la cabecera Content-Security-Policy</span><span class="pista"><span class="relleno" style="width:100%;background:#e07b1a"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Falta Cross-Origin-Resource-Policy</span><span class="pista"><span class="relleno" style="width:100%;background:#e8b13d"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Falta Cross-Origin-Embedder-Policy</span><span class="pista"><span class="relleno" style="width:20%;background:#e8b13d"></span></span><span class="val">1 URL</span></div><div class="barra"><span class="et">Falta Cross-Origin-Opener-Policy</span><span class="pista"><span class="relleno" style="width:20%;background:#e8b13d"></span></span><span class="val">1 URL</span></div><div class="barra"><span class="et">Aplicación web moderna (SPA)</span><span class="pista"><span class="relleno" style="width:100%;background:#7d93ab"></span></span><span class="val">5 URL</span></div><div class="barra"><span class="et">Contenido almacenable en caché</span><span class="pista"><span class="relleno" style="width:100%;background:#7d93ab"></span></span><span class="val">5 URL</span></div></div><div class="grafico"><h4>Pruebas de vulnerabilidades TLS</h4><div class="dona"><svg viewBox="0 0 180 180" width="180" height="180"><circle cx="90" cy="90" r="70" fill="none" stroke="#eef2f7" stroke-width="26"/><path d="M90.0,20.0 A70,70 0 1 1 59.6,26.9" fill="none" stroke="#1e7d4f" stroke-width="26"/><path d="M59.6,26.9 A70,70 0 0 1 90.0,20.0" fill="none" stroke="#e8b13d" stroke-width="26"/><text x="90" y="88" text-anchor="middle" class="c1">13/14</text><text x="90" y="108" text-anchor="middle" class="c2">superadas</text></svg><div><div class="ley"><i style="background:#1e7d4f"></i>No vulnerable <b>13</b></div><div class="ley"><i style="background:#e8b13d"></i>Revisar <b>1</b></div></div></div></div><div class="grafico"><h4>Protocolos: configuración correcta</h4><div class="barra"><span class="et">SSLv2</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">SSLv3</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">TLS 1</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">TLS 1.1</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">No ofrecido</span></div><div class="barra"><span class="et">TLS 1.2</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">Ofrecido</span></div><div class="barra"><span class="et">TLS 1.3</span><span class="pista"><span class="relleno" style="width:100%;background:#1e7d4f"></span></span><span class="val">Ofrecido</span></div></div></div></section><section class='card'><h3>1 · OWASP ZAP · análisis de la aplicación web</h3><p class='meta'>Objetivo <b>https://ayni.produccion.ejemplo</b> · Fri, 2 Oct 2026 08:58:59 · OWASP ZAP baseline (escaneo pasivo)</p><table><thead><tr><th>Riesgo</th><th>Hallazgo</th><th>Recomendación de ZAP</th><th>Tratamiento del equipo</th></tr></thead><tbody><tr><td><span class="chip medio">Medio</span></td><td><b>Falta la cabecera Content-Security-Policy</b><div class='sub'>Content Security Policy (CSP) Header Not Set · CWE-693 · confianza 3</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/<br>https://ayni.produccion.ejemplo/ingresar<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.</td><td>Corregido en Caddy (PR #32): CSP con origen propio, S3 prefirmado y frame-ancestors &#x27;none&#x27;.</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><b>Falta Cross-Origin-Embedder-Policy</b><div class='sub'>Cross-Origin-Embedder-Policy Header Missing or Invalid · CWE-693 · confianza 2</div><details><summary>1 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo</div></details></td><td class='sub'>Ensure that the application/web server sets the Cross-Origin-Embedder-Policy header appropriately, and that it sets the Cross-Origin-Embedder-Policy header to &#x27;require-corp&#x27; for documents.  If possible, ensure that the e</td><td>Aceptado: require-corp bloquearia recursos legítimos y la app no usa SharedArrayBuffer.</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><b>Falta Cross-Origin-Opener-Policy</b><div class='sub'>Cross-Origin-Opener-Policy Header Missing or Invalid · CWE-693 · confianza 2</div><details><summary>1 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo</div></details></td><td class='sub'>Ensure that the application/web server sets the Cross-Origin-Opener-Policy header appropriately, and that it sets the Cross-Origin-Opener-Policy header to &#x27;same-origin&#x27; for documents.  &#x27;same-origin-allow-popups&#x27; is consi</td><td>Corregido en Caddy (PR #32): same-origin.</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><b>Falta Cross-Origin-Resource-Policy</b><div class='sub'>Cross-Origin-Resource-Policy Header Missing or Invalid · CWE-693 · confianza 2</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/_next/static/chunks/main-app-37faa7c6711a10a3.js<br>https://ayni.produccion.ejemplo/_next/static/css/0888482f9c0d9690.css<br>https://ayni.produccion.ejemplo/_next/static/media/e4af272ccee01ff0-s.p.woff2<br>https://ayni.produccion.ejemplo/icon.png?47c655848b520312</div></details></td><td class='sub'>Ensure that the application/web server sets the Cross-Origin-Resource-Policy header appropriately, and that it sets the Cross-Origin-Resource-Policy header to &#x27;same-origin&#x27; for all web pages.  &#x27;same-site&#x27; is considered a</td><td>Corregido en Caddy (PR #32): same-origin.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Aplicación web moderna (SPA)</b><div class='sub'>Modern Web Application · CWE--1 · confianza 2</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo/%2Fpen%2Flanding-2cc23c14b5e9.png&amp;w=256&amp;q=75<br>https://ayni.produccion.ejemplo/%2Fpen%2Flanding-543cde9cf013.png&amp;w=256&amp;q=75<br>https://ayni.produccion.ejemplo/%2Fpen%2Flanding-cc4dc915faa1.png&amp;w=96&amp;q=75<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>This is an informational alert and so no changes are required.</td><td>Informativo: describe la tecnología, no es una vulnerabilidad.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Contenido almacenable en caché</b><div class='sub'>Storable and Cacheable Content · CWE-524 · confianza 2</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/_next/static/chunks/main-app-37faa7c6711a10a3.js<br>https://ayni.produccion.ejemplo/_next/static/css/0888482f9c0d9690.css<br>https://ayni.produccion.ejemplo/_next/static/media/e4af272ccee01ff0-s.p.woff2<br>https://ayni.produccion.ejemplo/icon.png?47c655848b520312</div></details></td><td class='sub'>Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retriev</td><td>Aceptado: páginas estáticas públicas, sin datos personales.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Contenido en Base64 en la respuesta</b><div class='sub'>Base64 Disclosure · CWE-319 · confianza 2</div><details><summary>2 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo/_next/image?q=75&amp;url=%2Fpen%2Flanding-543cde9cf013.png&amp;w=384<br>https://ayni.produccion.ejemplo/_next/static/chunks/688-3bdf0fee2ce30626.js</div></details></td><td class='sub'>Manually confirm that the Base64 data does not leak sensitive information, and that the data cannot be aggregated/used to exploit other vulnerabilities.</td><td>Falso positivo: son identificadores de compilación de Next.js, no datos.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Contenido no almacenable en caché</b><div class='sub'>Non-Storable Content · CWE-524 · confianza 2</div><details><summary>2 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>The content may be marked as storable by ensuring that the following conditions are satisfied:  The request method must be understood by the cache and defined as being cacheable (&quot;GET&quot;, &quot;HEAD&quot;, and &quot;POST&quot; are currently d</td><td>Esperado: las respuestas de la API no deben guardarse en caché.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-Dest</b><div class='sub'>Sec-Fetch-Dest Header is Missing · CWE-352 · confianza 3</div><details><summary>3 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that Sec-Fetch-Dest header is included in request headers.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-Mode</b><div class='sub'>Sec-Fetch-Mode Header is Missing · CWE-352 · confianza 3</div><details><summary>2 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt</div></details></td><td class='sub'>Ensure that Sec-Fetch-Mode header is included in request headers.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-Site</b><div class='sub'>Sec-Fetch-Site Header is Missing · CWE-352 · confianza 3</div><details><summary>2 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt</div></details></td><td class='sub'>Ensure that Sec-Fetch-Site header is included in request headers.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Petición sin Sec-Fetch-User</b><div class='sub'>Sec-Fetch-User Header is Missing · CWE-352 · confianza 3</div><details><summary>3 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/robots.txt<br>https://ayni.produccion.ejemplo/sitemap.xml</div></details></td><td class='sub'>Ensure that Sec-Fetch-User header is included in user initiated requests.</td><td>Informativo: depende del navegador del cliente, no del servidor.</td></tr><tr><td><span class="chip info">Informativo</span></td><td><b>Revisar directivas Cache-Control</b><div class='sub'>Re-examine Cache-control Directives · CWE-525 · confianza 1</div><details><summary>5 instancia(s)</summary><div class='sub'>https://ayni.produccion.ejemplo<br>https://ayni.produccion.ejemplo/<br>https://ayni.produccion.ejemplo/ingresar<br>https://ayni.produccion.ejemplo/pendiente<br>https://ayni.produccion.ejemplo/registro</div></details></td><td class='sub'>For secure content, ensure the cache-control HTTP header is set with &quot;no-cache, no-store, must-revalidate&quot;. If an asset should be cached consider setting the directives &quot;public, max-age, immutable&quot;.</td><td>Aceptado: aplica a páginas publicas sin datos del cliente.</td></tr></tbody></table></section><section class='card'><h3>2 · Nmap · superficie expuesta y cifrados</h3><div class='dos'><div><h4>Puertos expuestos a internet</h4><table><thead><tr><th>Puerto</th><th>Estado</th><th>Servicio</th><th>Versión</th></tr></thead><tbody><tr><td><b>80/tcp</b></td><td><span class="chip ok">open</span></td><td>http</td><td>Caddy httpd</td></tr><tr><td><b>443/tcp</b></td><td><span class="chip ok">open</span></td><td>ssl/http</td><td>Caddy httpd</td></tr></tbody></table><p class='nota'>Solo Caddy (80 redirige a 443). La base de datos, RabbitMQ, los servicios y Grafana no tienen puertos públicos: el grupo de seguridad de la EC2 solo abre 80 y 443, y RDS solo acepta conexiones desde la instancia.</p></div><div><h4>Cifrados TLS ofrecidos · nota mínima <span class="chip ok">A</span></h4><table><thead><tr><th>Suite</th><th>Nota</th></tr></thead><tbody><tr><td><code>TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_AKE_WITH_AES_128_GCM_SHA256</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_AKE_WITH_AES_256_GCM_SHA384</code></td><td><span class="chip ok">A</span></td></tr><tr><td><code>TLS_AKE_WITH_CHACHA20_POLY1305_SHA256</code></td><td><span class="chip ok">A</span></td></tr></tbody></table></div></div></section><section class='card'><h3>3 · testssl.sh · configuración TLS</h3><div class='dos'><div><h4>Protocolos</h4><table><thead><tr><th>Protocolo</th><th>Estado</th><th>Evaluación</th></tr></thead><tbody><tr><td><b>SSLv2</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>SSLv3</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1.1</b></td><td>No ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1.2</b></td><td>Ofrecido</td><td><span class="chip ok">Correcto</span></td></tr><tr><td><b>TLS 1.3</b></td><td>Ofrecido</td><td><span class="chip ok">Correcto</span></td></tr></tbody></table><h4>Certificado</h4><table class='ficha'><tbody><tr><th>Emisor</th><td>YE1 (Let&#x27;s Encrypt from US)</td></tr><tr><th>Validez</th><td>89 &gt;= 30 days (2026-10-02 04:45 --&gt; 2026-12-31 04:45)</td></tr><tr><th>Clave</th><td>EC 256 bits (curve P-256)</td></tr><tr><th>Firma</th><td>ECDSA with SHA384</td></tr><tr><th>HSTS</th><td>365 days=31536000 s, includeSubDomains</td></tr><tr><th>Transparencia</th><td>yes (certificate extension)</td></tr></tbody></table></div><div><h4>Vulnerabilidades conocidas de TLS</h4><table><thead><tr><th>Prueba</th><th>Resultado</th><th>Detalle</th></tr></thead><tbody><tr><td>Heartbleed (CVE-2014-0160)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK), no heartbeat extension</td></tr><tr><td>CCS (CVE-2014-0224)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>ROBOT</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>Server does not support any cipher suites that use RSA key transport</td></tr><tr><td>Secure Renegotiation (RFC 5746)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>supported (OK)</td></tr><tr><td>Secure Client-Initiated Renegotiation</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>CRIME, TLS (CVE-2012-4929)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>BREACH (CVE-2013-3587)</td><td><span class="chip aviso">Revisar</span></td><td class='sub'>potentially NOT ok, &quot;gzip deflate&quot; HTTP compression detected. - only supplied &quot;/&quot; tested</td></tr><tr><td>POODLE, SSL (CVE-2014-3566)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK), no SSLv3 support</td></tr><tr><td>TLS_FALLBACK_SCSV (RFC 7507)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>No fallback possible (OK), no protocol below TLS 1.2 offered</td></tr><tr><td>SWEET32 (CVE-2016-2183, CVE-2016-6329)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>FREAK (CVE-2015-0204)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK)</td></tr><tr><td>DROWN (CVE-2016-0800, CVE-2016-0703)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable on this host and port (OK)</td></tr><tr><td>BEAST (CVE-2011-3389)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>not vulnerable (OK), no SSL3 or TLS1</td></tr><tr><td>RC4 (CVE-2013-2566, CVE-2015-2808)</td><td><span class="chip ok">No vulnerable</span></td><td class='sub'>no RC4 ciphers detected (OK)</td></tr></tbody></table><p class='nota'>BREACH aparece como potencial porque Caddy comprime con gzip. No aplica a la API: los secretos (JWT) viajan en cabeceras y cookies HttpOnly, no en cuerpos comprimidos con contenido controlado por el atacante.</p></div></div></section><section class='card'><h3>4 · Nikto · servidor web</h3><table><thead><tr><th>Nivel</th><th>Hallazgo</th><th>Tratamiento</th></tr></thead><tbody><tr><td><span class="chip info">Info</span></td><td><code>GET /: Retrieved via header: 1.1 Caddy.</code></td><td>Informativo.</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><code>GET /: Uncommon header(s) &#x27;x-nextjs-stale-time&#x27; found, with contents: 300.</code></td><td>Revela la plataforma. Se elimina en Caddy (PR #32).</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><code>GET /: Uncommon header(s) &#x27;x-nextjs-prerender&#x27; found, with contents: 1,1.</code></td><td>Revela la plataforma. Se elimina en Caddy (PR #32).</td></tr><tr><td><span class="chip bajo">Bajo</span></td><td><code>GET /: Uncommon header(s) &#x27;x-nextjs-cache&#x27; found, with contents: HIT.</code></td><td>Revela la plataforma. Se elimina en Caddy (PR #32).</td></tr><tr><td><span class="chip info">Info</span></td><td><code>GET /: An alt-svc header was found which is advertising HTTP/3. The endpoint is: &#x27;:443&#x27;. Nikto cannot test HTTP/3 over QUIC. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/alt-svc: </code></td><td>Informativo.</td></tr><tr><td><span class="chip info">Info</span></td><td><code>GET /icons/: Uncommon header(s) &#x27;refresh&#x27; found, with contents: 0;url=/icons.</code></td><td>Informativo.</td></tr><tr><td><span class="chip info">Info</span></td><td><code>OPTIONS OPTIONS: Allowed HTTP Methods: ARRAY(0x55f7a8d34798) .</code></td><td>Informativo.</td></tr><tr><td><span class="chip medio">Medio</span></td><td><code>GET /: Suggested security header missing: content-security-policy. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP: </code></td><td>Cabecera de seguridad ausente. Corregido en PR #32.</td></tr></tbody></table></section><section class='card crudos'><h3>Salidas originales</h3><details><summary>Salida original de nmap</summary><pre>Objetivo: ayni.produccion.ejemplo
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-10-02 08:58 UTC
+Nmap scan report for ayni.produccion.ejemplo (x.x.x.x)
+Host is up (0.0058s latency).
+rDNS record for x.x.x.x: ec2-produccion.compute-1.amazonaws.com
+
+PORT    STATE SERVICE  VERSION
+80/tcp  open  http     Caddy httpd
+|_http-server-header: Caddy
+443/tcp open  ssl/http Caddy httpd
+| ssl-enum-ciphers: 
+|   TLSv1.2: 
+|     ciphers: 
+|       TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 (secp256r1) - A
+|       TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 (secp256r1) - A
+|       TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 (secp256r1) - A
+|     compressors: 
+|       NULL
+|     cipher preference: client
+|   TLSv1.3: 
+|     ciphers: 
+|       TLS_AKE_WITH_AES_128_GCM_SHA256 (ecdh_x25519) - A
+|       TLS_AKE_WITH_AES_256_GCM_SHA384 (ecdh_x25519) - A
+|       TLS_AKE_WITH_CHACHA20_POLY1305_SHA256 (ecdh_x25519) - A
+|     cipher preference: server
+|_  least strength: A
+|_http-server-header: Caddy
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 13.36 seconds
+</pre></details><details><summary>Salida original de testssl</summary><pre>## Scan started as: &quot;testssl.sh --quiet --color 0 --logfile /out/testssl.txt ayni.produccion.ejemplo:443&quot;
+## at 04bc5ecfb6cf:/home/testssl/bin/openssl.Linux.x86_64
+## version testssl: 3.2.4  from 
+## version openssl: &quot;1.0.2-bad&quot; from &quot;Fri Mar 28 16:54:51 2025&quot;)
+
+ Start 2026-10-02 08:58:05        --&gt;&gt; x.x.x.x:443 (ayni.produccion.ejemplo) &lt;&lt;--
+
+ rDNS (x.x.x.x): ec2-produccion.compute-1.amazonaws.com.
+ Service detected:       HTTP
+
+ Testing protocols via sockets except NPN+ALPN 
+
+ SSLv2      not offered (OK)
+ SSLv3      not offered (OK)
+ TLS 1      not offered
+ TLS 1.1    not offered
+ TLS 1.2    offered (OK)
+ TLS 1.3    offered (OK): final
+ NPN/SPDY   not offered
+ ALPN/HTTP2 h2, http/1.1 (offered)
+
+ Testing cipher categories 
+
+ NULL ciphers (no encryption)                      not offered (OK)
+ Anonymous NULL Ciphers (no authentication)        not offered (OK)
+ Export ciphers (w/o ADH+NULL)                     not offered (OK)
+ LOW: 64 Bit + DES, RC[2,4], MD5 (w/o export)      not offered (OK)
+ Triple DES Ciphers / IDEA                         not offered
+ Obsoleted CBC ciphers (AES, ARIA etc.)            not offered
+ Strong encryption (AEAD ciphers) with no FS       not offered
+ Forward Secrecy strong encryption (AEAD ciphers)  offered (OK)
+
+
+ Testing server&#x27;s cipher preferences 
+
+Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Cipher Suite Name (IANA/RFC)
+-----------------------------------------------------------------------------------------------------------------------------
+SSLv2
+ - 
+SSLv3
+ - 
+TLSv1
+ - 
+TLSv1.1
+ - 
+TLSv1.2 (server order -- server prioritizes ChaCha ciphers when preferred by clients)
+ xc02b   ECDHE-ECDSA-AES128-GCM-SHA256     ECDH 256   AESGCM      128      TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256            
+ xc02c   ECDHE-ECDSA-AES256-GCM-SHA384     ECDH 256   AESGCM      256      TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384            
+ xcca9   ECDHE-ECDSA-CHACHA20-POLY1305     ECDH 256   ChaCha20    256      TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256      
+TLSv1.3 (no server order, thus listed by strength)
+ x1302   TLS_AES_256_GCM_SHA384            ECDH/MLKEM AESGCM      256      TLS_AES_256_GCM_SHA384                             
+ x1303   TLS_CHACHA20_POLY1305_SHA256      ECDH/MLKEM ChaCha20    256      TLS_CHACHA20_POLY1305_SHA256                       
+ x1301   TLS_AES_128_GCM_SHA256            ECDH/MLKEM AESGCM      128      TLS_AES_128_GCM_SHA256                             
+
+ Has server cipher order?     yes (OK) -- only for &lt; TLS 1.3
+
+
+ Testing robust forward secrecy (FS) -- omitting Null Authentication/Encryption, 3DES, RC4 
+
+ FS is offered (OK)           TLS_AES_256_GCM_SHA384
+                              TLS_CHACHA20_POLY1305_SHA256
+                              ECDHE-ECDSA-AES256-GCM-SHA384
+                              ECDHE-ECDSA-CHACHA20-POLY1305
+                              TLS_AES_128_GCM_SHA256
+                              ECDHE-ECDSA-AES128-GCM-SHA256 
+ KEMs offered                 X25519MLKEM768 
+ Elliptic curves offered:     prime256v1 X25519 
+ TLS 1.2 sig_algs offered:    ECDSA+SHA512 ECDSA+SHA384 ECDSA+SHA256 
+ TLS 1.3 sig_algs offered:    ECDSA+SHA256 
+
+ Testing server defaults (Server Hello) 
+
+ TLS extensions (standard)    &quot;server name/#0&quot; &quot;EC point formats/#11&quot;
+                              &quot;application layer protocol negotiation/#16&quot;
+                              &quot;extended master secret/#23&quot; &quot;session ticket/#35&quot;
+                              &quot;supported versions/#43&quot; &quot;key share/#51&quot;
+                              &quot;renegotiation info/#65281&quot;
+ Session Ticket RFC 5077 hint no -- no lifetime advertised
+ SSL Session ID support       yes
+ Session Resumption           Tickets no, ID: no
+ TLS clock skew               Random values, no fingerprinting possible 
+ Certificate Compression      none
+ Client Authentication        none
+ Signature Algorithm          ECDSA with SHA384
+ Server key size              EC 256 bits (curve P-256)
+ Server key usage             Digital Signature
+ Server extended key usage    TLS Web Server Authentication
+ Serial                       051024350ADA4CEBEC3FFF879EFC14A7EF47 (OK: length 18)
+ Fingerprints                 SHA1 F031FC868464321B8E9706CD6C20D29C41A2E89C
+                              SHA256 2CC6A1193C606674A213FF4A9EC4A6B611151D7850DA713A8712F0636742ADF8
+ Common Name (CN)             ayni.produccion.ejemplo  (request w/o SNI didn&#x27;t succeed, usual for EC certificates)
+ subjectAltName (SAN)         ayni.produccion.ejemplo 
+ Trust (hostname)             Ok via SAN and CN (SNI mandatory)
+ Chain of trust               Ok   
+ EV cert (experimental)       no 
+ Certificate Validity (UTC)   89 &gt;= 30 days (2026-10-02 04:45 --&gt; 2026-12-31 04:45)
+ ETS/&quot;eTLS&quot;, visibility info  not present
+ Certificate Revocation List  http://ye1.c.lencr.org/72.crl
+ OCSP URI                     --
+ OCSP stapling                not offered
+ OCSP must staple extension   --
+ DNS CAA RR (experimental)    not offered
+ Certificate Transparency     yes (certificate extension)
+ Certificates provided        4
+ Issuer                       YE1 (Let&#x27;s Encrypt from US)
+ Intermediate cert validity   #1: ok &gt; 40 days (2028-09-02 23:59). YE1 &lt;-- Root YE
+                              #2: ok &gt; 40 days (2032-09-02 23:59). Root YE &lt;-- ISRG Root X2
+                              #3: ok &gt; 40 days (2032-09-02 23:59). ISRG Root X2 &lt;-- ISRG Root X1
+ Intermediate Bad OCSP (exp.) Ok
+
+
+ Testing HTTP header response @ &quot;/&quot; 
+
+ HTTP Status Code             200 OK
+ HTTP clock skew              0 sec from localtime
+ Strict Transport Security    365 days=31536000 s, includeSubDomains
+ Public Key Pinning           --
+ Server banner                (no &quot;Server&quot; line in header, interesting!)
+ Application banner           --
+ Cookie(s)                    (none issued at &quot;/&quot;)
+ Security headers             X-Frame-Options: DENY
+                              X-Content-Type-Options: nosniff
+                              Permissions-Policy: camera=(self), microphone=(),
+                                geolocation=()
+                              Referrer-Policy: strict-origin-when-cross-origin
+                              Cache-Control: s-maxage=31536000
+ Reverse Proxy banner         Via: 1.1 Caddy
+
+
+ Testing vulnerabilities 
+
+ Heartbleed (CVE-2014-0160)                not vulnerable (OK), no heartbeat extension
+ CCS (CVE-2014-0224)                       not vulnerable (OK)
+ Ticketbleed (CVE-2016-9244), experiment.  not vulnerable (OK)
+ ROBOT                                     Server does not support any cipher suites that use RSA key transport
+ Secure Renegotiation (RFC 5746)           supported (OK)
+ Secure Client-Initiated Renegotiation     not vulnerable (OK)
+ CRIME, TLS (CVE-2012-4929)                not vulnerable (OK)
+ BREACH (CVE-2013-3587)                    potentially NOT ok, &quot;gzip deflate&quot; HTTP compression detected. - only supplied &quot;/&quot; tested
+                                           Can be ignored for static pages or if no secrets in the page
+ POODLE, SSL (CVE-2014-3566)               not vulnerable (OK), no SSLv3 support
+ TLS_FALLBACK_SCSV (RFC 7507)              No fallback possible (OK), no protocol below TLS 1.2 offered
+ SWEET32 (CVE-2016-2183, CVE-2016-6329)    not vulnerable (OK)
+ FREAK (CVE-2015-0204)                     not vulnerable (OK)
+ DROWN (CVE-2016-0800, CVE-2016-0703)      not vulnerable on this host and port (OK)
+                                           no RSA certificate, thus certificate can&#x27;t be used with SSLv2 elsewhere
+ LOGJAM (CVE-2015-4000), experimental      not vulnerable (OK): no DH EXPORT ciphers, no DH key detected with &lt;= TLS 1.2
+ BEAST (CVE-2011-3389)                     not vulnerable (OK), no SSL3 or TLS1
+ LUCKY13 (CVE-2013-0169), experimental     not vulnerable (OK)
+ Winshock (CVE-2014-6321), experimental    not vulnerable (OK)
+ RC4 (CVE-2013-2566, CVE-2015-2808)        no RC4 ciphers detected (OK)
+
+
+ Running client simulations (HTTP) via sockets 
+
+ Browser                      Protocol  Cipher Suite Name (OpenSSL)       Forward Secrecy
+------------------------------------------------------------------------------------------------
+ Android 7.0 (native)         TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ Android 8.1 (native)         TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     253 bit ECDH (X25519)
+ Android 9.0 (native)         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 10.0 (native)        TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 11/12 (native)       TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 13/14 (native)       TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Android 15 (native)          TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Chrome 101 (Win 10)          TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Chromium 137 (Win 11)        TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Firefox 100 (Win 10)         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Firefox 137 (Win 11)         TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ IE 8 Win 7                   No connection
+ IE 11 Win 7                  TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ IE 11 Win 8.1                TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ IE 11 Win Phone 8.1          TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ IE 11 Win 10                 TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ Edge 15 Win 10               TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     253 bit ECDH (X25519)
+ Edge 101 Win 10 21H2         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Edge 133 Win 11 23H2         TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Safari 18.4 (iOS 18.4)       TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Safari 15.4 (macOS 12.3.1)   TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Safari 18.4 (macOS 15.4)     TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Java 7u25                    No connection
+ Java 8u442 (OpenJDK)         TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Java 11.0.2 (OpenJDK)        TLSv1.3   TLS_AES_128_GCM_SHA256            256 bit ECDH (P-256)
+ Java 17.0.3 (OpenJDK)        TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ Java 21.0.6 (OpenJDK)        TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ go 1.17.8                    TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ LibreSSL 3.3.6 (macOS)       TLSv1.3   TLS_CHACHA20_POLY1305_SHA256      253 bit ECDH (X25519)
+ OpenSSL 1.0.2e               TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ OpenSSL 1.1.1d (Debian)      TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ OpenSSL 3.0.15 (Debian)      TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+ OpenSSL 3.5.0 (git)          TLSv1.3   TLS_AES_128_GCM_SHA256            X25519MLKEM768
+ Apple Mail (16.0)            TLSv1.2   ECDHE-ECDSA-AES128-GCM-SHA256     256 bit ECDH (P-256)
+ Thunderbird (91.9)           TLSv1.3   TLS_AES_128_GCM_SHA256            253 bit ECDH (X25519)
+
+
+ Rating (experimental) 
+
+ Rating specs (not complete)  SSL Labs&#x27;s &#x27;SSL Server Rating Guide&#x27; (version 2009r from 2025-05-16)
+ Specification documentation  https://github.com/ssllabs/research/wiki/SSL-Server-Rating-Guide
+ Protocol Support (weighted)  100 (30)
+ Key Exchange     (weighted)  100 (30)
+ Cipher Strength  (weighted)  90 (36)
+ Final Score                  96
+ Overall Grade                A+
+
+ Done 2026-10-02 08:58:57 [  54s] --&gt;&gt; x.x.x.x:443 (ayni.produccion.ejemplo) &lt;&lt;--
+
+
+</pre></details><details><summary>Salida original de nikto</summary><pre>- Nikto v2.6.1/
++ Target Host: ayni.produccion.ejemplo
++ Target Port: 443
++ GET /: Retrieved via header: 1.1 Caddy.
++ GET /: Uncommon header(s) &#x27;x-nextjs-stale-time&#x27; found, with contents: 300.
++ GET /: Uncommon header(s) &#x27;x-nextjs-prerender&#x27; found, with contents: 1,1.
++ GET /: Uncommon header(s) &#x27;x-nextjs-cache&#x27; found, with contents: HIT.
++ GET /: An alt-svc header was found which is advertising HTTP/3. The endpoint is: &#x27;:443&#x27;. Nikto cannot test HTTP/3 over QUIC. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/alt-svc: 
++ GET /icons/: Uncommon header(s) &#x27;refresh&#x27; found, with contents: 0;url=/icons.
++ SSL Info:           Subject:  /CN=ayni.produccion.ejemplo
+                      CN:       ayni.produccion.ejemplo
+                      SAN:      ayni.produccion.ejemplo
+                      Ciphers:  TLS_AES_128_GCM_SHA256
+                      Issuer:   /C=US/O=Let&#x27;s Encrypt/CN=YE1
++ OPTIONS OPTIONS: Allowed HTTP Methods: ARRAY(0x55f7a8d34798) .
++ GET /: Suggested security header missing: content-security-policy. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP: 
+</pre></details></section></section>
+</main><footer>Generado el 02/10/2026 19:57 a partir de los artefactos del workflow · Ayni Bank · Curso Integrador II</footer>
+<a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>
