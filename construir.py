@@ -54,11 +54,11 @@ CATALOGO = [
         ("APF", "Informe de pruebas y cobertura", "Semana 09/APF02/evidencias/informe-pruebas.html",
          "semana-09/informe-pruebas.html", "Pirámide de pruebas y cobertura por servicio: JUnit, vitest, pytest y Playwright.",
          "Gráficos de cobertura por servicio."),
-        ("APF", "Diagramas de arquitectura", "Semana 09/APF02/evidencias/diagramas.html", "semana-09/diagramas.html",
+        ("Lámina", "Diagramas de arquitectura", "Semana 09/APF02/evidencias/diagramas.html", "semana-09/diagramas.html",
          "Arquitectura de datos y replicación propuesta, patrón Repository y despliegue en AWS.", "Diagramas por capas."),
-        ("APF", "Diagrama de secuencia", "Semana 09/APF02/evidencias/secuencia.html", "semana-09/secuencia.html",
+        ("Lámina", "Diagrama de secuencia", "Semana 09/APF02/evidencias/secuencia.html", "semana-09/secuencia.html",
          "Inicio de sesión con segundo factor (HU-04) atravesando puertos y adaptadores.", "Seguir el mensaje paso a paso."),
-        ("APF", "Cronograma real", "Semana 09/APF02/evidencias/gantt-apf2.html", "semana-09/cronograma.html",
+        ("Lámina", "Cronograma real", "Semana 09/APF02/evidencias/gantt-apf2.html", "semana-09/cronograma.html",
          "Diagrama de Gantt: línea base contra ejecución real hasta el APF2.", "Comparar lo planificado con lo ejecutado."),
     ]),
     ("10", "octubre", "Calidad funcional (ISO/IEC 25010) y V&V", [
@@ -75,8 +75,29 @@ CATALOGO = [
 _LOCAL = AQUI / "anonimizar.local.json"
 ANONIMIZAR = json.loads(_LOCAL.read_text(encoding="utf-8")) if _LOCAL.exists() else []
 
-VOLVER = ('<a href="{raiz}" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;'
-          'background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;'
+LAMINAS = {"semana-09/diagramas.html", "semana-09/secuencia.html", "semana-09/cronograma.html"}
+
+# Las láminas son lienzos de ancho fijo pensados para capturas: se presentan centradas sobre el fondo de la marca,
+# en una placa blanca que se escala al ancho de la pantalla.
+LAMINA_CSS = """<style id="ayni-lamina">
+html{background:#031321!important}
+body{background:transparent!important;margin:0!important;padding:96px 16px 72px!important;display:flex;flex-direction:column;
+ align-items:center;gap:36px;min-height:100vh}
+body>section,body>div{background:#fff;border-radius:3px;box-shadow:0 1px 0 rgba(214,183,109,.5),0 24px 70px rgba(0,0,0,.5);
+ transform-origin:top center;flex:none}
+#ayni-barra{position:fixed;inset:0 0 auto;height:60px;display:flex;align-items:center;gap:12px;padding:0 20px;z-index:2147483646;
+ background:rgba(3,19,33,.92);border-bottom:1px solid rgba(232,238,244,.09);font:500 14px/1 ui-monospace,Consolas,monospace;color:#e8eef4}
+#ayni-barra img{width:26px;height:26px}
+#ayni-barra span{color:#6f8397}#ayni-barra b{color:#d6b76d;font-weight:500}
+</style>"""
+LAMINA_JS = """<script>(function(){var b=document.createElement("div");b.id="ayni-barra";
+b.innerHTML='<img src="../marca/icono-64.png" alt=""> ayni bank <span>/ semana 09 /</span> <b>'+(document.title||(document.querySelector("h1,h2")||{}).textContent||"").replace(/^Ayni Bank · /,"").split(" · ")[0]+'</b>';
+document.body.prepend(b);var ps=[].slice.call(document.body.children).filter(function(e){return /^(SECTION|DIV)$/.test(e.tagName)&&e.id!=="ayni-barra"});
+function ajustar(){ps.forEach(function(e){e.style.zoom=1;var w=e.offsetWidth,m=document.documentElement.clientWidth-32;e.style.zoom=w>m?(m/w).toFixed(3):1})}
+ajustar();addEventListener("resize",ajustar)})();</script>"""
+
+VOLVER = ('<a href="{raiz}" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:500 13px/1 ui-monospace,Consolas,monospace;'
+          'background:#031321;color:#d6b76d;padding:10px 14px;border-radius:999px;text-decoration:none;'
           'box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a>')
 
 
@@ -99,6 +120,9 @@ def copiar(origen, destino):
     texto = objetivo.read_text(encoding="utf-8", errors="strict")
     for patron, cambio in ANONIMIZAR:
         texto = re.sub(patron, cambio, texto)
+    if destino in LAMINAS and 'id="ayni-lamina"' not in texto:
+        texto = texto.replace("</head>", LAMINA_CSS + "</head>", 1)
+        texto = texto.replace("</body>", LAMINA_JS + "</body>", 1)
     if "Bitácora Ayni</a>" not in texto:
         texto = texto.replace("</body>", VOLVER.format(raiz=raiz) + "</body>", 1) if "</body>" in texto \
             else texto + VOLVER.format(raiz=raiz)

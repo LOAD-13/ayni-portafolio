@@ -7,6 +7,16 @@ h2{margin:0 0 12px;color:#0b2a4a;font-size:20px}
 text{font-family:Segoe UI,Arial,sans-serif}
 .t{font-size:14px;font-weight:700;fill:#0b2a4a}.s{font-size:12px;fill:#4a5a6a}.w{font-size:13px;font-weight:700;fill:#fff}
 .mono{font-family:Consolas,monospace;font-size:12px}
+</style><style id="ayni-lamina">
+html{background:#031321!important}
+body{background:transparent!important;margin:0!important;padding:96px 16px 72px!important;display:flex;flex-direction:column;
+ align-items:center;gap:36px;min-height:100vh}
+body>section,body>div{background:#fff;border-radius:3px;box-shadow:0 1px 0 rgba(214,183,109,.5),0 24px 70px rgba(0,0,0,.5);
+ transform-origin:top center;flex:none}
+#ayni-barra{position:fixed;inset:0 0 auto;height:60px;display:flex;align-items:center;gap:12px;padding:0 20px;z-index:2147483646;
+ background:rgba(3,19,33,.92);border-bottom:1px solid rgba(232,238,244,.09);font:500 14px/1 ui-monospace,Consolas,monospace;color:#e8eef4}
+#ayni-barra img{width:26px;height:26px}
+#ayni-barra span{color:#6f8397}#ayni-barra b{color:#d6b76d;font-weight:500}
 </style></head><body>
 
 <section class="d" id="replicacion"><h2>Arquitectura de datos: hoy y replicación propuesta</h2>
@@ -95,4 +105,8 @@ text{font-family:Segoe UI,Arial,sans-serif}
  <line x1="830" y1="295" x2="858" y2="295" stroke="#064475" stroke-width="2" marker-end="url(#k)"/>
  <line x1="725" y1="106" x2="725" y2="128" stroke="#064475" stroke-width="2" marker-end="url(#k)"/>
 </svg></section>
-<a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>
+<script>(function(){var b=document.createElement("div");b.id="ayni-barra";
+b.innerHTML='<img src="../marca/icono-64.png" alt=""> ayni bank <span>/ semana 09 /</span> <b>'+(document.title||(document.querySelector("h1,h2")||{}).textContent||"").replace(/^Ayni Bank · /,"").split(" · ")[0]+'</b>';
+document.body.prepend(b);var ps=[].slice.call(document.body.children).filter(function(e){return /^(SECTION|DIV)$/.test(e.tagName)&&e.id!=="ayni-barra"});
+function ajustar(){ps.forEach(function(e){e.style.zoom=1;var w=e.offsetWidth,m=document.documentElement.clientWidth-32;e.style.zoom=w>m?(m/w).toFixed(3):1})}
+ajustar();addEventListener("resize",ajustar)})();</script><a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:500 13px/1 ui-monospace,Consolas,monospace;background:#031321;color:#d6b76d;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>

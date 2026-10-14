@@ -44,6 +44,16 @@ h1{font-size:24px;color:var(--azul)}
 .k-desv{width:26px;height:11px;border-radius:3px;background:var(--ambar)}
 .k-hoy{width:2px;height:14px;background:var(--rojo)}
 .k-ok{width:10px;height:10px;transform:rotate(45deg);background:var(--verde)}
+</style><style id="ayni-lamina">
+html{background:#031321!important}
+body{background:transparent!important;margin:0!important;padding:96px 16px 72px!important;display:flex;flex-direction:column;
+ align-items:center;gap:36px;min-height:100vh}
+body>section,body>div{background:#fff;border-radius:3px;box-shadow:0 1px 0 rgba(214,183,109,.5),0 24px 70px rgba(0,0,0,.5);
+ transform-origin:top center;flex:none}
+#ayni-barra{position:fixed;inset:0 0 auto;height:60px;display:flex;align-items:center;gap:12px;padding:0 20px;z-index:2147483646;
+ background:rgba(3,19,33,.92);border-bottom:1px solid rgba(232,238,244,.09);font:500 14px/1 ui-monospace,Consolas,monospace;color:#e8eef4}
+#ayni-barra img{width:26px;height:26px}
+#ayni-barra span{color:#6f8397}#ayni-barra b{color:#d6b76d;font-weight:500}
 </style></head><body><div class="lienzo" id="gantt">
 <h1>Cronograma del proyecto · línea base contra ejecución real</h1>
 <p class="sub">La barra de trazo discontinuo es la <b>línea base</b> aprobada en el Acta de Constitución.
@@ -61,4 +71,8 @@ propia ventana. Los sprints aún no iniciados solo muestran línea base.</p>
   <span><i class="k-ok"></i>Hito cumplido</span>
   <span><i class="k-hoy"></i>Hoy · 3 de octubre de 2026</span>
 </div>
-</div><a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:600 13px/1 system-ui,sans-serif;background:#061a2e;color:#f4e7c5;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>
+</div><script>(function(){var b=document.createElement("div");b.id="ayni-barra";
+b.innerHTML='<img src="../marca/icono-64.png" alt=""> ayni bank <span>/ semana 09 /</span> <b>'+(document.title||(document.querySelector("h1,h2")||{}).textContent||"").replace(/^Ayni Bank · /,"").split(" · ")[0]+'</b>';
+document.body.prepend(b);var ps=[].slice.call(document.body.children).filter(function(e){return /^(SECTION|DIV)$/.test(e.tagName)&&e.id!=="ayni-barra"});
+function ajustar(){ps.forEach(function(e){e.style.zoom=1;var w=e.offsetWidth,m=document.documentElement.clientWidth-32;e.style.zoom=w>m?(m/w).toFixed(3):1})}
+ajustar();addEventListener("resize",ajustar)})();</script><a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:500 13px/1 ui-monospace,Consolas,monospace;background:#031321;color:#d6b76d;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>
