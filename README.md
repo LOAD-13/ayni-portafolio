@@ -7,8 +7,8 @@ Los entregables interactivos del Curso Integrador II: Software (UTP 2026-II), se
 Para añadir una semana:
 1. Agrega su entrada a `CATALOGO` en `construir.py`.
 2. Ejecuta `python construir.py`: copia el HTML desde la carpeta «Semana XX» del curso, le añade el enlace de vuelta y regenera la portada.
-3. Si la semana trae documentos (Word, PDF, Excel), agrégalos a `DOCUMENTOS`. Un mismo `id` en otra semana es una
-   versión nueva del mismo documento.
+3. Si es un avance (APF), agrega su informe a `DOCUMENTOS`. Solo se publican los informes de los APF: el resto del
+   trabajo semanal se presenta en los HTML. Un mismo `id` en otra semana es una versión nueva del mismo documento.
 
 ## Versiones
 

@@ -18,7 +18,6 @@ CURSO = AQUI.parent
 
 # (semana, mes, tema, [(tipo, título, origen, destino, descripción, en vivo)])
 CATALOGO = [
-    ("01", "agosto", "Constitución del proyecto", []),
     ("02", "agosto", "Diseño UX/UI", [
         ("Prototipo", "Prototipo navegable de Ayni", "Semana 09/htmls", "semana-02/prototipo",
          "Las pantallas diseñadas en pen.dev convertidas en un recorrido clicable: landing, registro, captura del DNI, "
@@ -82,44 +81,14 @@ SERIE = {
     "semana-09/controles-de-seguridad.html": "controles-de-seguridad",
 }
 
-# Documentos del equipo (Word, PDF, Excel): (semana, id, título, [fuentes]). Un mismo id en semanas distintas es una
-# versión nueva del mismo documento. Las diapositivas y rúbricas del docente no se publican: no son nuestras.
+# Documentos publicados: solo los informes de los avances (APF). El resto del trabajo semanal se presenta en los HTML.
+# (semana, id, título, [fuentes]). Un mismo id en semanas distintas es una versión nueva del mismo documento.
 DOCUMENTOS = [
-    ("01", "acta-de-constitucion", "Acta de Constitución", ["Semana 01/Acta de Constitución - Ayni Bank.docx"]),
-    ("01", "historias-de-usuario", "Historias de Usuario", ["Semana 01/Historias de Usuario - Ayni Bank.docx"]),
-    ("01", "matriz-de-interesados", "Matriz de Gestión de Interesados",
-     ["Semana 01/Matriz de Gestión de Interesados - Ayni Bank.docx"]),
-    ("01", "matriz-de-riesgos", "Matriz de Gestión de Riesgos", ["Semana 01/Matriz de Gestión de Riesgos - Ayni Bank.docx"]),
-    ("01", "cronograma-gantt", "Cronograma Gantt", ["Semana 01/Ayni_Bank_Gantt.xlsx"]),
-    ("02", "acta-de-constitucion", "Acta de Constitución", ["Semana 02/Acta de Constitución - Ayni Bank v2.docx"]),
     ("05", "apf1-informe", "Informe APF1 · Avance de Proyecto Final 1",
      ["Semana 05/APF 1/APF1 - Avance de Proyecto Final 1 - Ayni Bank.docx",
       "Semana 05/APF 1/APF1 - Avance de Proyecto Final 1 - Ayni Bank.pdf"]),
-    ("05", "apf1-guion", "Guion de sustentación del APF1", ["Semana 05/APF 1/Guion de sustentacion APF1 - Ayni Bank.docx"]),
-    ("05", "acta-de-constitucion", "Acta de Constitución", ["Semana 05/Acta de Constitución - Ayni Bank v3.docx"]),
-    ("05", "matriz-de-riesgos", "Matriz de Gestión de Riesgos", ["Semana 05/Matriz de Gestión de Riesgos - Ayni Bank v2.docx"]),
-    ("05", "analisis-de-negocio", "Análisis de negocio · Lean Canvas y procesos",
-     ["Semana 05/Analisis de Negocio - Lean Canvas y Procesos - Ayni Bank.docx"]),
-    ("05", "arquitectura-y-codigo", "Arquitectura, estructura del código y navegación",
-     ["Semana 05/Arquitectura, Estructura del Codigo y Navegacion - Ayni Bank.docx"]),
-    ("05", "cronograma-y-roles", "Cronograma, planificación ágil y roles",
-     ["Semana 05/Cronograma, Planificacion Agil y Roles - Ayni Bank.docx"]),
-    ("05", "metricas-y-monitoreo", "Métricas, SLA-SLO y plan de monitoreo",
-     ["Semana 05/Metricas, SLA-SLO y Plan de Monitoreo - Ayni Bank.docx"]),
-    ("05", "reporte-wpo", "Reporte WPO · optimización del rendimiento web",
-     ["Semana 05/Reporte WPO - Optimizacion del Rendimiento Web - Ayni Bank.docx"]),
-    ("05", "seleccion-de-herramientas", "Selección de herramientas de desarrollo",
-     ["Semana 05/Seleccion de Herramientas de Desarrollo - Ayni Bank.docx"]),
-    ("06", "diccionario-de-datos-word", "Diccionario de datos", ["Semana 06/entregables/Diccionario de Datos - Ayni Bank.docx"]),
-    ("06", "taller-diseno-fisico", "Taller de diseño físico de base de datos",
-     ["Semana 06/entregables/Taller de Diseno Fisico de Base de Datos - Ayni Bank.docx"]),
-    ("08", "controles-de-seguridad-word", "Diseño de controles de seguridad",
-     ["Semana 08/entregables/Diseno de Controles de Seguridad - Ayni Bank.docx"]),
-    ("09", "apf2-informe", "Informe APF2", ["Semana 09/APF02/Informe APF2 - Ayni Bank.docx",
-                                            "Semana 09/APF02/Informe APF2 - Ayni Bank.pdf"]),
-    ("09", "apf2-guion", "Guion de sustentación del APF2", ["Semana 09/APF02/Guion APF2 - Ayni Bank.docx"]),
-    ("09", "apf2-respuestas", "Respuestas preparadas para el APF2", ["Semana 09/APF02/Respuestas_APF2_Ayni_Bank.docx"]),
-    ("10", "calidad-funcional-word", "Calidad funcional y V&V", ["Semana 10/entregables/Calidad Funcional y VV - Ayni Bank.docx"]),
+    ("09", "apf2-informe", "Informe APF2 · Avance de Proyecto Final 2", ["Semana 09/APF02/Informe APF2 - Ayni Bank.docx",
+                                                                        "Semana 09/APF02/Informe APF2 - Ayni Bank.pdf"]),
 ]
 
 # Qué cambió en las versiones que ya existían antes de que hubiera versionado (comparando los documentos).
