@@ -214,6 +214,17 @@
    "nota": "Primera versión publicada.",
    "huella": "1a7465357cf1b02d",
    "archivos": {
+    "HTML": "versiones/interoperabilidad-y-coexistencia/v1/interoperabilidad-y-coexistencia.html"
+   }
+  },
+  {
+   "v": 2,
+   "clave": "semana-11/interoperabilidad-y-coexistencia.html",
+   "semana": "11",
+   "fecha": "2026-10-22",
+   "nota": "Material de apoyo ampliado: ecosistema, explorador tipo Swagger con respuestas reales, validador en vivo, anatomia del error, simulador de timeouts, consolas que se mueven con el vecino ruidoso y el apagado, guion de demostracion y preguntas.",
+   "huella": "65878400fc039b2f",
+   "archivos": {
     "HTML": "semana-11/interoperabilidad-y-coexistencia.html"
    }
   }
