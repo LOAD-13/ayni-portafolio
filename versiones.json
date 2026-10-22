@@ -1,0 +1,475 @@
+{
+ "acta-de-constitucion": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-01/acta-de-constitucion",
+   "semana": "01",
+   "fecha": "2026-08-15",
+   "nota": "Primera versión publicada.",
+   "huella": "442f132d7a0b965d",
+   "archivos": {
+    "DOCX": "documentos/semana-01/acta-de-constitucion.docx"
+   }
+  },
+  {
+   "v": 2,
+   "clave": "documentos/semana-02/acta-de-constitucion",
+   "semana": "02",
+   "fecha": "2026-08-23",
+   "nota": "Roles Scrum: el docente pasa a Product Owner y Joaquín a Scrum Master. El equipo crece de 4 a 6 integrantes. Se añaden OBJ-07 (normativa financiera), la volumetría comprometida y el costo valorizado del equipo.",
+   "huella": "db90f1edcdd1682b",
+   "archivos": {
+    "DOCX": "documentos/semana-02/acta-de-constitucion.docx"
+   }
+  },
+  {
+   "v": 3,
+   "clave": "documentos/semana-05/acta-de-constitucion",
+   "semana": "05",
+   "fecha": "2026-09-03",
+   "nota": "OBJ-02 con su línea base (de uno a tres días hábiles en agencia) e indicadores medibles.",
+   "huella": "5ea0de1e5b8d6c0c",
+   "archivos": {
+    "DOCX": "documentos/semana-05/acta-de-constitucion.docx"
+   }
+  }
+ ],
+ "historias-de-usuario": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-01/historias-de-usuario",
+   "semana": "01",
+   "fecha": "2026-08-15",
+   "nota": "Primera versión publicada.",
+   "huella": "7b1763b87e7f3cfc",
+   "archivos": {
+    "DOCX": "documentos/semana-01/historias-de-usuario.docx"
+   }
+  }
+ ],
+ "matriz-de-interesados": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-01/matriz-de-interesados",
+   "semana": "01",
+   "fecha": "2026-08-14",
+   "nota": "Primera versión publicada.",
+   "huella": "65c46b7090724270",
+   "archivos": {
+    "DOCX": "documentos/semana-01/matriz-de-interesados.docx"
+   }
+  }
+ ],
+ "matriz-de-riesgos": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-01/matriz-de-riesgos",
+   "semana": "01",
+   "fecha": "2026-08-14",
+   "nota": "Primera versión publicada.",
+   "huella": "5b9f875524f012d5",
+   "archivos": {
+    "DOCX": "documentos/semana-01/matriz-de-riesgos.docx"
+   }
+  },
+  {
+   "v": 2,
+   "clave": "documentos/semana-05/matriz-de-riesgos",
+   "semana": "05",
+   "fecha": "2026-09-03",
+   "nota": "Mapa de calor probabilidad × impacto, 16 riesgos (3 nuevos: curva de aprendizaje, proveedor de correo y dependencias vulnerables), contingencia con responsable y seguimiento integrado en las ceremonias.",
+   "huella": "df5b5512ec3f5bc9",
+   "archivos": {
+    "DOCX": "documentos/semana-05/matriz-de-riesgos.docx"
+   }
+  }
+ ],
+ "cronograma-gantt": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-01/cronograma-gantt",
+   "semana": "01",
+   "fecha": "2026-08-15",
+   "nota": "Primera versión publicada.",
+   "huella": "5887fc030b87803e",
+   "archivos": {
+    "XLSX": "documentos/semana-01/cronograma-gantt.xlsx"
+   }
+  }
+ ],
+ "prototipo": [
+  {
+   "v": 1,
+   "clave": "semana-02/prototipo",
+   "semana": "02",
+   "fecha": "2026-08-24",
+   "nota": "Primera versión publicada.",
+   "huella": "07c69b18e7b3f243",
+   "archivos": {
+    "HTML": "semana-02/prototipo/index.html"
+   }
+  }
+ ],
+ "lighthouse-antes": [
+  {
+   "v": 1,
+   "clave": "semana-05/lighthouse-antes.html",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "74fd50669a7e8e9a",
+   "archivos": {
+    "HTML": "semana-05/lighthouse-antes.html"
+   }
+  }
+ ],
+ "lighthouse-despues": [
+  {
+   "v": 1,
+   "clave": "semana-05/lighthouse-despues.html",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "be65de96d86896b8",
+   "archivos": {
+    "HTML": "semana-05/lighthouse-despues.html"
+   }
+  }
+ ],
+ "apf1-informe": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/apf1-informe",
+   "semana": "05",
+   "fecha": "2026-09-07",
+   "nota": "Primera versión publicada.",
+   "huella": "43b5e277f3e403df",
+   "archivos": {
+    "DOCX": "documentos/semana-05/apf1-informe.docx",
+    "PDF": "documentos/semana-05/apf1-informe.pdf"
+   }
+  }
+ ],
+ "apf1-guion": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/apf1-guion",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "1b1dde0fca9aa012",
+   "archivos": {
+    "DOCX": "documentos/semana-05/apf1-guion.docx"
+   }
+  }
+ ],
+ "analisis-de-negocio": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/analisis-de-negocio",
+   "semana": "05",
+   "fecha": "2026-09-03",
+   "nota": "Primera versión publicada.",
+   "huella": "d3f83730ee4fb8b9",
+   "archivos": {
+    "DOCX": "documentos/semana-05/analisis-de-negocio.docx"
+   }
+  }
+ ],
+ "arquitectura-y-codigo": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/arquitectura-y-codigo",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "11e28c0a9fbd14bf",
+   "archivos": {
+    "DOCX": "documentos/semana-05/arquitectura-y-codigo.docx"
+   }
+  }
+ ],
+ "cronograma-y-roles": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/cronograma-y-roles",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "993016ab9ed4102d",
+   "archivos": {
+    "DOCX": "documentos/semana-05/cronograma-y-roles.docx"
+   }
+  }
+ ],
+ "metricas-y-monitoreo": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/metricas-y-monitoreo",
+   "semana": "05",
+   "fecha": "2026-09-03",
+   "nota": "Primera versión publicada.",
+   "huella": "fc980054717e4a34",
+   "archivos": {
+    "DOCX": "documentos/semana-05/metricas-y-monitoreo.docx"
+   }
+  }
+ ],
+ "reporte-wpo": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/reporte-wpo",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "9148942893f590b5",
+   "archivos": {
+    "DOCX": "documentos/semana-05/reporte-wpo.docx"
+   }
+  }
+ ],
+ "seleccion-de-herramientas": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-05/seleccion-de-herramientas",
+   "semana": "05",
+   "fecha": "2026-09-04",
+   "nota": "Primera versión publicada.",
+   "huella": "bc03f3c4bfdf480d",
+   "archivos": {
+    "DOCX": "documentos/semana-05/seleccion-de-herramientas.docx"
+   }
+  }
+ ],
+ "diccionario-de-datos": [
+  {
+   "v": 1,
+   "clave": "semana-06/diccionario-bd.html",
+   "semana": "06",
+   "fecha": "2026-09-21",
+   "nota": "Primera versión publicada.",
+   "huella": "f53550d6574f97e4",
+   "archivos": {
+    "HTML": "semana-06/diccionario-bd.html"
+   }
+  },
+  {
+   "v": 2,
+   "clave": "semana-09/diccionario-bd.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "El catálogo real de la base en la nube, con las tablas de transferencias, auditoría y outbox.",
+   "huella": "19e5454038cfd92d",
+   "archivos": {
+    "HTML": "semana-09/diccionario-bd.html"
+   }
+  }
+ ],
+ "erd": [
+  {
+   "v": 1,
+   "clave": "semana-06/erd.html",
+   "semana": "06",
+   "fecha": "2026-09-20",
+   "nota": "Primera versión publicada.",
+   "huella": "6d39c7c455ffe208",
+   "archivos": {
+    "HTML": "semana-06/erd.html"
+   }
+  }
+ ],
+ "diccionario-de-datos-word": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-06/diccionario-de-datos-word",
+   "semana": "06",
+   "fecha": "2026-09-21",
+   "nota": "Primera versión publicada.",
+   "huella": "c66c0702db6561e0",
+   "archivos": {
+    "DOCX": "documentos/semana-06/diccionario-de-datos-word.docx"
+   }
+  }
+ ],
+ "taller-diseno-fisico": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-06/taller-diseno-fisico",
+   "semana": "06",
+   "fecha": "2026-09-15",
+   "nota": "Primera versión publicada.",
+   "huella": "2fe580cc2dabfdb3",
+   "archivos": {
+    "DOCX": "documentos/semana-06/taller-diseno-fisico.docx"
+   }
+  }
+ ],
+ "controles-de-seguridad": [
+  {
+   "v": 1,
+   "clave": "semana-08/controles-de-seguridad.html",
+   "semana": "08",
+   "fecha": "2026-09-28",
+   "nota": "Primera versión publicada.",
+   "huella": "e3a86a8b76658c0b",
+   "archivos": {
+    "HTML": "semana-08/controles-de-seguridad.html"
+   }
+  },
+  {
+   "v": 2,
+   "clave": "semana-09/controles-de-seguridad.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "Actualización con lo ya implementado: estado de madurez control por control.",
+   "huella": "6354972978bde2d5",
+   "archivos": {
+    "HTML": "semana-09/controles-de-seguridad.html"
+   }
+  }
+ ],
+ "controles-de-seguridad-word": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-08/controles-de-seguridad-word",
+   "semana": "08",
+   "fecha": "2026-09-28",
+   "nota": "Primera versión publicada.",
+   "huella": "4d83f96920b58d85",
+   "archivos": {
+    "DOCX": "documentos/semana-08/controles-de-seguridad-word.docx"
+   }
+  }
+ ],
+ "informe-seguridad": [
+  {
+   "v": 1,
+   "clave": "semana-09/informe-seguridad.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "Primera versión publicada.",
+   "huella": "65c774c3f34d24ed",
+   "archivos": {
+    "HTML": "semana-09/informe-seguridad.html"
+   }
+  }
+ ],
+ "informe-pruebas": [
+  {
+   "v": 1,
+   "clave": "semana-09/informe-pruebas.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "Primera versión publicada.",
+   "huella": "84f8a321c78ba827",
+   "archivos": {
+    "HTML": "semana-09/informe-pruebas.html"
+   }
+  }
+ ],
+ "diagramas": [
+  {
+   "v": 1,
+   "clave": "semana-09/diagramas.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "Primera versión publicada.",
+   "huella": "d06ad030836fee5b",
+   "archivos": {
+    "HTML": "semana-09/diagramas.html"
+   }
+  }
+ ],
+ "secuencia": [
+  {
+   "v": 1,
+   "clave": "semana-09/secuencia.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "Primera versión publicada.",
+   "huella": "c6fade5380b98936",
+   "archivos": {
+    "HTML": "semana-09/secuencia.html"
+   }
+  }
+ ],
+ "cronograma": [
+  {
+   "v": 1,
+   "clave": "semana-09/cronograma.html",
+   "semana": "09",
+   "fecha": "2026-10-02",
+   "nota": "Primera versión publicada.",
+   "huella": "547bf780de7ce7a0",
+   "archivos": {
+    "HTML": "semana-09/cronograma.html"
+   }
+  }
+ ],
+ "apf2-informe": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-09/apf2-informe",
+   "semana": "09",
+   "fecha": "2026-10-03",
+   "nota": "Primera versión publicada.",
+   "huella": "140021353dfef112",
+   "archivos": {
+    "DOCX": "documentos/semana-09/apf2-informe.docx",
+    "PDF": "documentos/semana-09/apf2-informe.pdf"
+   }
+  }
+ ],
+ "apf2-guion": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-09/apf2-guion",
+   "semana": "09",
+   "fecha": "2026-10-03",
+   "nota": "Primera versión publicada.",
+   "huella": "7819866abefbb61e",
+   "archivos": {
+    "DOCX": "documentos/semana-09/apf2-guion.docx"
+   }
+  }
+ ],
+ "apf2-respuestas": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-09/apf2-respuestas",
+   "semana": "09",
+   "fecha": "2026-10-04",
+   "nota": "Primera versión publicada.",
+   "huella": "cfc327c65e5d6d1b",
+   "archivos": {
+    "DOCX": "documentos/semana-09/apf2-respuestas.docx"
+   }
+  }
+ ],
+ "calidad-funcional-y-vv": [
+  {
+   "v": 1,
+   "clave": "semana-10/calidad-funcional-y-vv.html",
+   "semana": "10",
+   "fecha": "2026-10-14",
+   "nota": "Primera versión publicada.",
+   "huella": "ed87a74a6cdcf7c8",
+   "archivos": {
+    "HTML": "semana-10/calidad-funcional-y-vv.html"
+   }
+  }
+ ],
+ "calidad-funcional-word": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-10/calidad-funcional-word",
+   "semana": "10",
+   "fecha": "2026-10-14",
+   "nota": "Primera versión publicada.",
+   "huella": "189f067233f4cc3a",
+   "archivos": {
+    "DOCX": "documentos/semana-10/calidad-funcional-word.docx"
+   }
+  }
+ ]
+}
