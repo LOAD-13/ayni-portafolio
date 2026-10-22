@@ -204,5 +204,18 @@
     "HTML": "semana-10/calidad-funcional-y-vv.html"
    }
   }
+ ],
+ "interoperabilidad-y-coexistencia": [
+  {
+   "v": 1,
+   "clave": "semana-11/interoperabilidad-y-coexistencia.html",
+   "semana": "11",
+   "fecha": "2026-10-22",
+   "nota": "Primera versión publicada.",
+   "huella": "1a7465357cf1b02d",
+   "archivos": {
+    "HTML": "semana-11/interoperabilidad-y-coexistencia.html"
+   }
+  }
  ]
 }

@@ -72,6 +72,12 @@ CATALOGO = [
          "ISO/IEC 25023, modelo en V y guion UAT.",
          "Trazabilidad inversa, 0.1 + 0.2 en vivo, simulación del fraude del redondeo y modelo en V pulsable."),
     ]),
+    ("11", "octubre", "Interoperabilidad y coexistencia (ISO/IEC 25010)", [
+        ("Entregable", "Interoperabilidad y coexistencia", "Semana 11/entregables/interoperabilidad-y-coexistencia.html",
+         "semana-11/interoperabilidad-y-coexistencia.html", "Contratos OpenAPI vivos, 400 uniforme, timeouts, las cuatro capas de la "
+         "interoperabilidad, techos de memoria medidos con docker stats y apagado ordenado.",
+         "Simular el vecino ruidoso con y sin techos, y un docker stop en plena carga."),
+    ]),
 ]
 
 # Piezas HTML que son versiones sucesivas de un mismo entregable: comparten identificador y forman un historial.
@@ -236,7 +242,10 @@ def publicar_documento(id_, fuentes, carpeta):
             if anonimizar_office(o, d) and ext == ".docx":
                 docx_anon = d
         elif ext == ".pdf" and docx_anon:
-            pdf_con_word(str(docx_anon.resolve()), str(d.resolve()))
+            # Word deja una marca de tiempo en el PDF: regenerarlo en cada construcción cambiaría el archivo sin
+            # cambiar nada. Solo se regenera si la fuente es más reciente que el PDF publicado.
+            if not d.exists() or d.stat().st_mtime < o.stat().st_mtime:
+                pdf_con_word(str(docx_anon.resolve()), str(d.resolve()))
         else:
             shutil.copy2(o, d)
         archivos.append((ext[1:].upper(), d.relative_to(AQUI).as_posix(), d.stat().st_size))
