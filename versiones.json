@@ -249,6 +249,17 @@
    "nota": "Primera versión publicada.",
    "huella": "9ab7c10128d509bb",
    "archivos": {
+    "HTML": "versiones/usabilidad-y-compromiso/v1/usabilidad-y-compromiso.html"
+   }
+  },
+  {
+   "v": 2,
+   "clave": "semana-12/usabilidad-y-compromiso.html",
+   "semana": "12",
+   "fecha": "2026-10-28",
+   "nota": "Visor de capturas con zoom en la misma página",
+   "huella": "b606d355b90389a0",
+   "archivos": {
     "HTML": "semana-12/usabilidad-y-compromiso.html"
    }
   }
