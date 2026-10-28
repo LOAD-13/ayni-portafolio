@@ -78,6 +78,12 @@ CATALOGO = [
          "interoperabilidad, techos de memoria medidos con docker stats y apagado ordenado.",
          "Simular el vecino ruidoso con y sin techos, y un docker stop en plena carga."),
     ]),
+    ("12", "octubre", "Usabilidad: protección contra errores, asistencia y compromiso", [
+        ("Entregable", "Usabilidad y compromiso del usuario", "Semana 12/entregables/usabilidad-y-compromiso.html",
+         "semana-12/usabilidad-y-compromiso.html", "Las cuatro barreras del diseño defensivo, pistas accesibles, bienvenida, "
+         "progreso visible, logro, ayuda contextual y la encuesta SUS, con capturas de la aplicación y sus pruebas.",
+         "Validar mientras se escribe con y sin el defecto encontrado, y calcular un SUS."),
+    ]),
 ]
 
 # Piezas HTML que son versiones sucesivas de un mismo entregable: comparten identificador y forman un historial.

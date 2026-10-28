@@ -239,5 +239,18 @@
     "HTML": "semana-11/interoperabilidad-y-coexistencia.html"
    }
   }
+ ],
+ "usabilidad-y-compromiso": [
+  {
+   "v": 1,
+   "clave": "semana-12/usabilidad-y-compromiso.html",
+   "semana": "12",
+   "fecha": "2026-10-28",
+   "nota": "Primera versión publicada.",
+   "huella": "9ab7c10128d509bb",
+   "archivos": {
+    "HTML": "semana-12/usabilidad-y-compromiso.html"
+   }
+  }
  ]
 }
