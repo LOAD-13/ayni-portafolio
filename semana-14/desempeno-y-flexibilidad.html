@@ -190,7 +190,8 @@ body[data-t="oscuro"] .accr{background:#13202d;color:#d7e3ee}
 .flujo .paso b{display:block;font-size:12px;opacity:.75}.flujo .paso.on{background:rgba(95,199,154,.18)}.flujo code{white-space:pre-wrap}
 .inst{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.inst .nodo{border:1px solid rgba(127,127,127,.4);border-radius:10px;padding:10px 14px;min-width:150px;font-size:13px}
 .inst .nodo.caido{opacity:.45;text-decoration:line-through}.inst .nodo b{display:block;font-size:20px}
-pre.cod{background:#0b1220;color:#d6e2f0;border-radius:10px;padding:12px 14px;font:12.5px/1.5 Consolas,monospace;overflow:auto}
+pre.codigo{display:block;text-align:left;background:#0b1220;color:#d6e2f0;border-radius:10px;padding:12px 14px;font:12.5px/1.5 Consolas,monospace;overflow:auto;margin:14px 0}
+section>img.shot{display:block;margin:18px auto;max-width:min(100%,1100px);border-radius:8px}
 </style></head><body>
 <header class="top"><div class="tit"><h1>Eficiencia de Desempeño y Flexibilidad · Ayni Bank</h1><span class="s">Sesiones 27 y 28 · ISO/IEC 25010 · 11 de noviembre de 2026</span>
 <span class="acc"><button class="bt" id="tema">Tema oscuro</button></span></div><nav class="tabs"><button class="tab on" data-v="pan">Panorama</button><button class="tab" data-v="k6">1 · Prueba con k6</button><button class="tab" data-v="opt">2 · Optimización</button><button class="tab" data-v="flag">3 · Configuración y flag</button><button class="tab" data-v="esc">4 · Escalado horizontal</button><button class="tab" data-v="met">Metacognición</button><button class="tab" data-v="evi">Evidencias</button><button class="tab" data-v="tra">Trazabilidad</button></nav></header>
@@ -217,7 +218,7 @@ pide, una vez por segundo, las seis consultas que hace la banca, cada una con su
 <h3>La técnica: paginación en la base</h3>
 <p class="intro">De las cuatro técnicas de la clase (caché, CDN, paginación y carga diferida), la paginación es la que ataca este problema. Una
 función de ventana calcula la suma acumulada dentro de PostgreSQL y a la aplicación solo llega la página.</p>
-<pre class="cod">SELECT ... , t.saldo_posterior
+<pre class="codigo">SELECT ... , t.saldo_posterior
 FROM (SELECT a.*, SUM(CASE WHEN a.tipo = &#x27;ABONO&#x27; THEN a.importe ELSE -a.importe END)
                   OVER (ORDER BY a.registrado_en, a.id) AS saldo_posterior
       FROM core.asiento a WHERE a.cuenta_id = :cuenta) t
@@ -250,7 +251,7 @@ un nginx (8088) que reparte las peticiones por turnos. La cabecera <code>X-Ayni-
 <div class="caja"><div class="inst"><div class="nodo" id="n1">ayni-gateway<b id="c1">0</b>peticiones</div><div class="nodo" id="n2">ayni-gateway-2<b id="c2">0</b>peticiones</div></div>
 <div class="chips"><button class="bt" id="eEnv">Enviar 6 peticiones</button><button class="bt" id="eCae">Apagar ayni-gateway-2</button><button class="bt" id="eRes">Reiniciar</button></div>
 <div class="term"><div class="tb"><span>nginx · 8088</span></div><div class="tc" id="eLog"></div></div></div>
-<pre class="cod">upstream gateway {
+<pre class="codigo">upstream gateway {
     zone gateway 64k;                       # turno compartido entre los workers de nginx
     server ayni-gateway:8080   max_fails=1 fail_timeout=10s;
     server ayni-gateway-2:8080 max_fails=1 fail_timeout=10s;
@@ -326,6 +327,7 @@ $('#eEnv').onclick=()=>{for(let k=0;k<6;k++){let i=E.turno;E.turno=(E.turno+1)%2
  if(!E.vivo[i]){if(!E.fuera){extra=' (ayni-gateway-2 no responde en 1 s → reintento; nginx la descarta 10 s)';E.fuera=true}i=1-i}E.c[i]++;E.n++;
  el('<span class="'+(extra?'am':'ok')+'">#'+E.n+' X-Ayni-Instancia: ayni-gateway'+(i?'-2':'')+' · HTTP 200'+extra+'</span>')}pinta()};
 $('#eCae').onclick=()=>{E.vivo[1]=!E.vivo[1];E.fuera=false;el('<span class="'+(E.vivo[1]?'ok':'ko')+'">docker '+(E.vivo[1]?'start':'stop')+' ayni-gateway-2</span>');pinta()};
-$('#eRes').onclick=()=>{E.n=0;E.c=[0,0];E.vivo=[true,true];E.turno=0;E.fuera=false;elog.length=0;$('#eLog').innerHTML='';pinta()};pinta();
+const inicio=()=>el('<span class="gr">Pulsa «Enviar 6 peticiones»: nginx las reparte por turnos.</span>');
+$('#eRes').onclick=()=>{E.n=0;E.c=[0,0];E.vivo=[true,true];E.turno=0;E.fuera=false;elog.length=0;inicio();pinta()};inicio();pinta();
 try{const t=localStorage.getItem('s14-tab');if(t&&document.getElementById(t))ir(t)}catch(e){}
 </script><a href="../" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;font:500 13px/1 ui-monospace,Consolas,monospace;background:#031321;color:#d6b76d;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.35);border:1px solid #c59e41">← Bitácora Ayni</a></body></html>
