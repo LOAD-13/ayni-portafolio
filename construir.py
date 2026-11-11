@@ -84,6 +84,13 @@ CATALOGO = [
          "progreso visible, logro, ayuda contextual y la encuesta SUS, con capturas de la aplicación y sus pruebas.",
          "Validar mientras se escribe con y sin el defecto encontrado, y calcular un SUS."),
     ]),
+    ("13", "noviembre", "APF3 · Calidad funcional, interoperabilidad, usabilidad y despliegue v2", []),
+    ("14", "noviembre", "Eficiencia de desempeño y flexibilidad", [
+        ("Entregable", "Desempeño y flexibilidad", "Semana 14/entregables/desempeno-y-flexibilidad.html",
+         "semana-14/desempeno-y-flexibilidad.html", "Prueba de humo con k6, el cuello de botella del historial paginado en la "
+         "base (P95 de 185 a 36 ms), un feature flag sin reconstruir la imagen y dos gateways detrás de nginx.",
+         "Comparar el P95 antes y después, cambiar el flag y apagar una instancia del gateway."),
+    ]),
 ]
 
 # Piezas HTML que son versiones sucesivas de un mismo entregable: comparten identificador y forman un historial.
@@ -101,6 +108,8 @@ DOCUMENTOS = [
       "Semana 05/APF 1/APF1 - Avance de Proyecto Final 1 - Ayni Bank.pdf"]),
     ("09", "apf2-informe", "Informe APF2 · Avance de Proyecto Final 2", ["Semana 09/APF02/Informe APF2 - Ayni Bank.docx",
                                                                         "Semana 09/APF02/Informe APF2 - Ayni Bank.pdf"]),
+    ("13", "apf3-informe", "Informe APF3 · Avance de Proyecto Final 3", ["Semana 13/APF03/Informe APF3 - Ayni Bank.docx",
+                                                                        "Semana 13/APF03/Informe APF3 - Ayni Bank.pdf"]),
 ]
 
 # Qué cambió en las versiones que ya existían antes de que hubiera versionado (comparando los documentos).

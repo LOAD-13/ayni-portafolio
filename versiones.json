@@ -263,5 +263,32 @@
     "HTML": "semana-12/usabilidad-y-compromiso.html"
    }
   }
+ ],
+ "desempeno-y-flexibilidad": [
+  {
+   "v": 1,
+   "clave": "semana-14/desempeno-y-flexibilidad.html",
+   "semana": "14",
+   "fecha": "2026-11-11",
+   "nota": "Primera versión publicada.",
+   "huella": "774d223d37c9cf52",
+   "archivos": {
+    "HTML": "semana-14/desempeno-y-flexibilidad.html"
+   }
+  }
+ ],
+ "apf3-informe": [
+  {
+   "v": 1,
+   "clave": "documentos/semana-13/apf3-informe",
+   "semana": "13",
+   "fecha": "2026-11-02",
+   "nota": "Primera versión publicada.",
+   "huella": "a867358879078b0e",
+   "archivos": {
+    "DOCX": "documentos/semana-13/apf3-informe.docx",
+    "PDF": "documentos/semana-13/apf3-informe.pdf"
+   }
+  }
  ]
 }
